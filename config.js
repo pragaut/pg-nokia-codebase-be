@@ -77,9 +77,6 @@ const config = {
 		'otp-password-verification-verify-otp': {
 			all: true
 		}, 
-		'admin-groupmaster': {
-			all: true
-		}, 
 		'admin': {
 			all: true
 		}, 

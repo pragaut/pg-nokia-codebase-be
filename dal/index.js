@@ -326,7 +326,7 @@ const getModelForAssociation = (_model, asChild) => {
         default:
             model = {
                 model: _model, where: {
-                    active: 1
+                    isActive: 1
                 },
                 required: false
             }
@@ -1013,6 +1013,7 @@ const deleteRecords = (modelToDelete, ids, updatedBy, res, transaction) => {
 
             model.update({
                 active: false,
+                isActive: false,
                 updatedBy
             },
                 {
@@ -1084,6 +1085,7 @@ const saveData = async (model, body, res, callingUserId, transaction, counter = 
             //console.log("save data 4");
             body.createdBy = callingUserId;
             body.active = true;
+            body.isActive = true;
 
             newRecord = true;
 
@@ -1227,6 +1229,7 @@ const bulkCreate = async (model, records, callingUserId, transaction, DONT_CREAT
             // let's not mutate the original record
             const _record = JSON.parse(JSON.stringify(record));
             _record.active = true;
+            _record.isActive = true;
             _record.createdBy = callingUserId;
 
             if (!_record.id && !DONT_CREATE_ID) {
@@ -1265,6 +1268,7 @@ const bulkUpdate = async (model, records, callingUserId, transaction, updateOnDu
             // let's not mutate the original record
             const _record = JSON.parse(JSON.stringify(record));
             _record.active = true;
+            _record.isActive = true;
             _record.createdBy = callingUserId;
 
             if (!fields) {
@@ -1327,7 +1331,8 @@ const deleteRecordWrapper = async (model, id, name, requestorId, res) => {
 
         const data = {
             id: id,
-            active: false
+            active: false,
+            isActive : false
         };
         const result = await saveData(model, data, null, requestorId);
 

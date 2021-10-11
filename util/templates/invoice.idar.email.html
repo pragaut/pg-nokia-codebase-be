@@ -1,0 +1,62 @@
+<div style="margin-left: 40px; margin-top: 40px;">
+    Dear <%userName%>,<br /><br />
+
+    <!-- An Invoice has been generated for your company. -->
+    <%emailBody%> <br />
+    <b>Remarks/Description :</b>  <%mainRemarks%>
+    <br /><br />
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid black;">
+        <tr style="background-color:#008080;color:white;letter-spacing:2px">
+            <th style="border: 1px solid black; padding:5px">
+               Raised By
+            </th>
+            <th style="border: 1px solid black; padding:5px">
+                Raised For
+             </th>
+            <th style="border: 1px solid black; padding:5px">
+                Invoice Number (Record Number)
+            </th>
+            <th style="border: 1px solid black; padding:5px">
+                Invoice Date
+            </th>
+            <th style="border: 1px solid black; padding:5px">
+                Total Amount
+            </th>
+            <th style="border: 1px solid black; padding:5px">
+                Voucher Type
+            </th>
+            <th style="border: 1px solid black; padding:5px">
+                Nature Of Transaction
+            </th>
+            <th style="border: 1px solid black; padding:5px">
+                GL Code
+            </th>
+            <th style="border: 1px solid black; padding:5px">
+                Description
+            </th>
+
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid black; padding:5px"><%rPlantName%></td>
+            <td style="border: 1px solid black; padding:5px"><%pPlantName%></td>
+            <td style="border: 1px solid black; padding:5px"><%invoiceNumber%> ( <%recordNumber%> )</td>
+            <td style="border: 1px solid black; padding:5px"><%invoiceDate%></td>
+            <td style="border: 1px solid black; padding:5px"><%totalAmount%></td>
+            <td style="border: 1px solid black; padding:5px"><%Vouchertype%></td>
+            <td style="border: 1px solid black; padding:5px"><%NatureOftransaction%></td>
+            <td style="border: 1px solid black; padding:5px"><%glCode%></td>
+            <td style="border: 1px solid black; padding:5px"><%description%></td>
+
+        </tr>
+    </table><br />
+    <%MediaDetails%>
+    <br /><br />
+    Thanks & regards,<br />
+  <b>ANAND Automotive Private Limited </b>  <br />
+    1, Sri Aurobindo Marg, <br />
+    Hauz Khas, New Delhi – 110016 <br />
+    <b>Telephone:</b> +91 114209 2337 <br />
+    <!-- <b>Mobile:</b> +91 9818502457 <br /> -->
+    <a href="http://www.anandgroupindia.com" target="_blank">http://www.anandgroupindia.com</a> 
+</div>

@@ -146,6 +146,11 @@ const getModelByModelName = modelName => {
                 model: db.db.processFlowResponsibilityMaster,
                 where: { active: 1 }
             }
+            case 'organisationDetails':
+                return {
+                    model: db.db.organisationDetails,
+                    where: { isActive: 1 }
+                }
     };
     return undefined;
 };
@@ -323,6 +328,13 @@ const getModelForAssociation = (_model, asChild) => {
                 }, required: false,
             };
             break;
+            case 'organisationDetails':
+                model = {
+                    model: _model, where: {
+                        isActive: 1
+                    }, required: false,
+                };
+                break;
         default:
             model = {
                 model: _model, where: {
@@ -847,7 +859,7 @@ const getList = async options => {
         /**
          * for user, please don't return the password and hashes for security
          */
-
+         console.log('model Name : ',model)
         const excludedAttributes = includedAttributes ? [] : getExcludedAttributes(model);
 
         /*

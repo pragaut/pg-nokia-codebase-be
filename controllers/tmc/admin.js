@@ -1326,7 +1326,6 @@ const getAuditTypeAuditorRelationMasterById = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting Audit Type Auditor Relation Master');
     }
 };
-
 const _findAuditTypeAuditorRelationWithAuditTypeId = async (auditTypeId, isActive, id) => {
     let where = [];
     if (id && id !== null && id !== 'undefined') {
@@ -1342,16 +1341,6 @@ const _findAuditTypeAuditorRelationWithAuditTypeId = async (auditTypeId, isActiv
         return 'success'
     }
 };
-
-
-/**
-* 
-* @param {*} req 
-* @param {*} res 
-* 
-* by defaut gives last one month data.
-*/
-
 const getAuditTypeAuditorRelationMaster = async (req, res) => {
     try {
         let where = [];
@@ -1382,15 +1371,6 @@ const getAuditTypeAuditorRelationMaster = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting Audit Type Auditor Relation');
     }
 };
-/**
-* 
-* @param {*} req 
-* @param {*} res 
-
-
-
-*/
-
 const saveAuditTypeAuditorRelationMaster = async (req, res) => {
     try {
         const auditTypeAuditorRelation = req.body;
@@ -1409,7 +1389,6 @@ const saveAuditTypeAuditorRelationMaster = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'saving Audit Type Auditor Relation details');
     }
 };
-
 const deleteAuditTypeAuditorRelationMaster = async (req, res) => {
     try {
         //console.log("delete Due Day req : ", req);
@@ -1422,7 +1401,6 @@ const deleteAuditTypeAuditorRelationMaster = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'deleting Audit Type Auditor Relation details');
     }
 };
-
 //#endregion
 
 

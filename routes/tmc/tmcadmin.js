@@ -116,4 +116,12 @@ router.put('/processFlowResponsibilityMaster', (req, res) => admin.saveProcessFl
 router.post('/processFlowResponsibilityMaster', (req, res) => admin.saveProcessFlowResponsibilityMaster(req, res));
 router.delete('/processFlowResponsibilityMaster', (req, res) => admin.deleteProcessFlowResponsibilityMaster(req, res)); 
 //#endregion
+
+//#region Tower Master
+router.get('/towerMaster', (req, res) => admin.getTowerMaster(req, res));
+router.put('/towerMaster', (req, res) => admin.saveTowerMaster(req, res));
+router.post('/towerMaster', (req, res) => admin.saveTowerMaster(req, res));
+router.delete('/towerMaster', (req, res) => admin.deleteTowerMaster(req, res));
+//#endregion
+
 module.exports = router;

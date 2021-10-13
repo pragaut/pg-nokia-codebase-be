@@ -175,7 +175,7 @@ const requiredFields = {
 	login_OTP: ['userName', 'OTP'],
 	login_social: ['email', 'token'],
 	groupMaster: ['groupName', 'groupCode'],
-	roleMaster: ['roleName', 'roleCode'],
+	roleMaster: ['roleName'],
 	//invoicePaymentDetails: ['paymentAmount'],
 };
 

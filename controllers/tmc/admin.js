@@ -1830,7 +1830,131 @@ const deleteProcessFlowResponsibilityMaster = async (req, res) => {
 };
 //#endregion
 
+//#region  Tower Master  
+const getTowerMasterById = async (req, res) => {
+    try {
+        const result = await dal.findById(db.towerMaster, req.query.id);
 
+        responseHelper.success(res, codes.SUCCESS, result);
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting Tower master data');
+    }
+};
+/**
+* 
+* @param {*} req 
+* @param {*} res 
+* 
+* by defaut gives last one month data.
+*/
+const getTowerMaster = async (req, res) => {
+    try {
+        let where = [];
+        where.push(util.constructWheresForSequelize('isActive', 1));
+        if (req.query.id) {
+            return getTowerMasterById(req, res);
+        }
+        else {
+            await dal.getList({ model: db.towerMaster, where, order: [['createdAt', 'desc']], include: true, rowsToReturn: req.query.rows, pageIndex: req.query.pageIndex, res });
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting Tower details');
+    }
+};
+
+// const getLastAlarmTypeOrder = async (isActive) => {
+//     try {
+//         const towerMaster = await db.towerMaster.findOne({
+//             order: [['`alarmTypeOrder`', 'desc']],
+//             limit: 1,
+//             where: {
+//                 is_active: 1
+//             },
+//             attributes: ['alarmTypeOrder']
+//         });
+
+//         return alarmTypeMaster;
+//     }
+//     catch (error) {
+//         return undefined;
+//     }
+// };
+/**
+* 
+* @param {*} req 
+* @param {*} res 
+*/
+
+const _FindTowerMasterAlreadyExistOrNot = async (id, siteName) => {
+    let where = [];
+    if (id && id !== null && id !== 'undefined') {
+        where.push(util.constructWheresForNotEqualSequelize('id', id));
+    }
+    where.push(util.constructWheresForSequelize('isActive', 1));
+    where.push(util.constructWheresForSequelize('siteName', siteName));
+
+    const towerMasterDetails = await dal.getList({ model: db.towerMaster, where, order: [['createdAt', 'desc']], include: false, });
+    if (towerMasterDetails && towerMasterDetails.length > 0) {
+        return 'already exist'
+    }
+    else {
+        return 'success'
+    }
+}
+
+const saveTowerMaster = async (req, res) => {
+    try {
+        const towerMaster = req.body;
+
+       
+        console.log("Tower Master : ",towerMaster);
+        const PKID = towerMaster && towerMaster.id ? towerMaster.id : undefined;
+        const ChekAlreadyExist = await _FindTowerMasterAlreadyExistOrNot(PKID, towerMaster.siteName);
+        let CodeMsg = towerMaster && towerMaster.siteName ? 'Tower  "' + towerMaster.siteName + '" already in use' : 'Tower code already in use';
+        if (ChekAlreadyExist && ChekAlreadyExist !== "success") throw util.generateWarning(CodeMsg, codes.CODE_ALREADY_EXISTS);
+
+        // let lastOrder = 0;
+        // if (alarmTypeMaster.alarmTypeOrder == null) {
+        //     lastOrder = await getLastAlarmTypeOrder(true);
+        //     if (lastOrder && lastOrder.alarmTypeOrder)
+        //     alarmTypeMaster.alarmTypeOrder = lastOrder.alarmTypeOrder + 1;
+        //     else
+        //     alarmTypeMaster.alarmTypeOrder = 1;
+        // }
+    console.log("req : ", req.user);
+       if(req.user && req.user.id !==null)
+       UserId = req.user.id;
+       //-----let primaryKey = 'tower_id';
+        if (util.missingRequiredFields('towerMaster', towerMaster, res) === '') {
+           //----- await dal.saveData(db.towerMaster, towerMaster, res, UserId, undefined, undefined, undefined, primaryKey);
+            await dal.saveData(db.towerMaster, towerMaster, res, UserId);
+        }
+        else {
+            console.log("Backend Tower master Data else condition", req)
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'saving Tower master details');
+    }
+};
+
+const deleteTowerMaster = async (req, res) => {
+    try {
+        if(req.user && req.user.id !==null)
+         UserId = req.user.id;
+        if (!req.query.id) {
+            throw util.generateWarning(`Please provide Tower master id`, codes.ID_NOT_FOUND);
+        }
+        dal.deleteRecords(db.towerMaster, req.query.id, UserId, res);
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'deleting Tower master details');
+    }
+};
+
+//#endregion
 
 module.exports.saveNotificationDetailsMaster = saveNotificationDetailsMaster;
 module.exports.deleteNotificationDetailsMaster = deleteNotificationDetailsMaster;
@@ -1892,3 +2016,7 @@ module.exports.deleteScopeMaster = deleteScopeMaster;
 module.exports.getProcessFlowResponsibilityMaster = getProcessFlowResponsibilityMaster;
 module.exports.saveProcessFlowResponsibilityMaster = saveProcessFlowResponsibilityMaster;
 module.exports.deleteProcessFlowResponsibilityMaster = deleteProcessFlowResponsibilityMaster;
+
+module.exports.saveTowerMaster = saveTowerMaster;
+module.exports.deleteTowerMaster = deleteTowerMaster;
+module.exports.getTowerMaster = getTowerMaster;

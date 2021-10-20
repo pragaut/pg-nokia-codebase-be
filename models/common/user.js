@@ -3,34 +3,49 @@ module.exports = function (sequelize, DataTypes) {
 		id: {
 			type: DataTypes.STRING,
 			primaryKey: true,
+			field :'user_id'
+		}, 
+		username: DataTypes.STRING,
+		employeeId: {
+			type: DataTypes.STRING,
+			field :'employee_id'
+		}, 
+		roleId: {
+			type: DataTypes.STRING,
+			field :'role_id'
 		},
-		Code: DataTypes.STRING,
-		title: DataTypes.STRING,
-		firstName: DataTypes.STRING,
-		lastName: DataTypes.STRING,
-		plantMasterId: DataTypes.STRING,
-		departmentMasterId: DataTypes.STRING,
-
-		city: DataTypes.STRING,
-		state: DataTypes.STRING,
-
-		mobile: DataTypes.STRING,
-		email: DataTypes.STRING,
-		mobileConfirmed: DataTypes.BOOLEAN,
-		emailConfirmed: DataTypes.BOOLEAN,
-		userName: DataTypes.STRING,
 		password: DataTypes.STRING,
-		passwordSalt: DataTypes.STRING,
-
-		reconciliation_session_id: DataTypes.STRING,
-		isActive: DataTypes.BOOLEAN,
-
-		active: DataTypes.BOOLEAN,
-		createdBy: DataTypes.STRING,
-		updatedBy: DataTypes.STRING
+		saltPassword: {
+			type: DataTypes.STRING,
+			field :'salt_password'
+		}, 
+		accessGroupId: {
+			type: DataTypes.STRING,
+			field :'access_group_id'
+		},
+		isActive: {
+			type : DataTypes.BOOLEAN,
+			field : 'is_active'
+		},		
+		createdBy: {
+			type : DataTypes.STRING,
+			field : 'created_by'
+		},
+		createdAt: {
+			type: DataTypes.DATE,
+			field: 'created_on',
+		  },
+		modifiedBy: {
+			type : DataTypes.STRING,
+			field : 'modified_by'
+		},
+		updatedAt: {
+			type: DataTypes.DATE,
+			field: 'modified_on'
+		  }
 	},
 		{
-			tableName: 'tbl_UserDetails',
+			tableName: 'tbl_nk_users',
 			classMethods: {
 				associate: function (Models) {
 					// associations can be defined here

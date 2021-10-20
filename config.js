@@ -167,7 +167,7 @@ const config = {
 
 
 const requiredFields = {
-	register: ['firstName', 'lastName', 'email', 'password'],
+	register: ['username','password'],
 	registerLogin: ['userName', 'userNameType'],
 	updateProfile: ['firstName', 'lastName', 'MobileEmail', 'userNameType'],
 	event: ['name', 'url', 'buyInAmount', 'scheduledStart'],
@@ -197,21 +197,12 @@ const accessConfig = [
 const listAttributes = {
 	user: [
 		'id', 
-		'code', 
-		'firstName', 
-		'lastName', 
-		'title', 
-		'city', 
-		'state', 
-		'mobile', 
-		'email',
-		'mobileConfirmed', 
-		'emailConfirmed', 
-		'userName',
-		'unSuccessfullLoginCount',
-		'isUserLocked',
-		'plantMasterId', 
-		'departmentMasterId', //'password',
+		'username', 
+		'employeeId', 
+		'roleId', 
+		'password', 
+		'saltPassword', 
+		'accessGroupId', 
 		'isActive', 
 		'createdAt', 
 		'updatedAt'
@@ -220,7 +211,7 @@ const listAttributes = {
 
 
 const listAttributes_minimum = {
-	user: ['id', 'firstName', 'lastName', 'email', 'userName'],
+	user: ['id', 'username'],
 };
 
 

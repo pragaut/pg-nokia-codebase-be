@@ -94,12 +94,12 @@ const getModelByModelName = modelName => {
         case 'user':
             return {
                 model: db.db.user,
-                where: { active: 1 }
+                where: { isActive: 1 }
             }
         case 'userRole':
             return {
                 model: db.db.userRole,
-                where: { active: 1 }
+                where: { isActive: 1 }
             }
         case 'dueDaysMaster':
             return {
@@ -218,7 +218,7 @@ const getModelForAssociation = (_model, asChild) => {
         case 'user':
             model = {
                 model: _model, attributes: listAttributes['user'], where: {
-                    active: 1
+                    isActive: 1
                 },
                 required: false
             };
@@ -227,7 +227,7 @@ const getModelForAssociation = (_model, asChild) => {
         case 'userRole':
             model = {
                 model: _model, where: {
-                    active: 1
+                    isActive: 1
                 },
                 required: true
             };
@@ -1125,7 +1125,10 @@ const saveData = async (model, body, res, callingUserId, transaction, counter = 
                 options['transaction'] = transaction;
                 options['lock'] = false;
             }
-            //console.log("save data 6");
+            // console.log("save data 6");
+            // console.log("save data 6.0.0----------",model.name);
+            // console.log("save data 6.0.1----------",body);
+            // console.log("save data 6.0.2----------",options);
             const result = await model.create(body, options);
             //console.log("save data 6.1");
             if (res) {
@@ -1185,7 +1188,7 @@ const saveData = async (model, body, res, callingUserId, transaction, counter = 
         }
     }
     catch (error) {
-
+        console.log('eeeeee: error ------------- ', error);
         console.log('eeeeee: ', error.name, error.fields);
 
         if (error.name === 'SequelizeUniqueConstraintError' && newRecord) {

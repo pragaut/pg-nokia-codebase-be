@@ -68,11 +68,13 @@ const entry = async (req, res, next) => {
             next();
         }
         else {
+            console.log("we got the unsuccessful result, the access is good",response.error);
             // error
             throw response.error;
         }
     }
     catch (error) {
+        console.log("we got the unsuccessful result, the access is good 2",error);  
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR);
     }
 };

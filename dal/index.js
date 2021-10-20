@@ -146,11 +146,16 @@ const getModelByModelName = modelName => {
                 model: db.db.processFlowResponsibilityMaster,
                 where: { active: 1 }
             }
-            case 'organisationDetails':
-                return {
-                    model: db.db.organisationDetails,
-                    where: { isActive: 1 }
-                }
+        case 'organisationDetails':
+            return {
+                model: db.db.organisationDetails,
+                where: { isActive: 1 }
+            }
+        case 'towerMaster':
+            return {
+                model: db.db.towerMaster,
+                where: { isActive: 1 }
+            }
     };
     return undefined;
 };
@@ -179,6 +184,14 @@ const getModelForAssociation = (_model, asChild) => {
             break;
 
         case 'groupAccess':
+            model = {
+                model: _model, where: {
+                    active: 1
+                },
+                required: false
+            };
+            break;
+        case 'towerMaster':
             model = {
                 model: _model, where: {
                     active: 1
@@ -328,13 +341,13 @@ const getModelForAssociation = (_model, asChild) => {
                 }, required: false,
             };
             break;
-            case 'organisationDetails':
-                model = {
-                    model: _model, where: {
-                        isActive: 1
-                    }, required: false,
-                };
-                break;
+        case 'organisationDetails':
+            model = {
+                model: _model, where: {
+                    isActive: 1
+                }, required: false,
+            };
+            break;
         default:
             model = {
                 model: _model, where: {
@@ -859,7 +872,7 @@ const getList = async options => {
         /**
          * for user, please don't return the password and hashes for security
          */
-         console.log('model Name : ',model)
+        console.log('model Name : ', model)
         const excludedAttributes = includedAttributes ? [] : getExcludedAttributes(model);
 
         /*
@@ -1344,7 +1357,7 @@ const deleteRecordWrapper = async (model, id, name, requestorId, res) => {
         const data = {
             id: id,
             active: false,
-            isActive : false
+            isActive: false
         };
         const result = await saveData(model, data, null, requestorId);
 

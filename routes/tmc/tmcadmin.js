@@ -124,4 +124,25 @@ router.post('/towerMaster', (req, res) => admin.saveTowerMaster(req, res));
 router.delete('/towerMaster', (req, res) => admin.deleteTowerMaster(req, res));
 //#endregion
 
+//#region Tower Allotment Master
+router.get('/towerAllotmentMaster', (req, res) => admin.getTowerAllotmentMaster(req, res));
+router.put('/towerAllotmentMaster', (req, res) => admin.saveTowerAllotmentMaster(req, res));
+router.post('/towerAllotmentMaster', (req, res) => admin.saveTowerAllotmentMaster(req, res));
+router.delete('/towerAllotmentMaster', (req, res) => admin.deleteTowerAllotmentMaster(req, res));
+//#endregion
+
+//#region Tower Antennas Master
+router.get('/towerAntennasMaster', (req, res) => admin.getTowerAntennasMaster(req, res));
+router.put('/towerAntennasMaster', (req, res) => admin.saveTowerAntennasMaster(req, res));
+router.post('/towerAntennasMaster', (req, res) => admin.saveTowerAntennasMaster(req, res));
+router.delete('/towerAntennasMaster', (req, res) => admin.deleteTowerAntennasMaster(req, res));
+//#endregion
+
+//#region Device Registration Master
+router.get('/deviceRegistrationMaster', (req, res) => admin.getDeviceRegistrationMaster(req, res));
+router.put('/deviceRegistrationMaster', (req, res) => admin.saveDeviceRegistrationMaster(req, res));
+router.post('/deviceRegistrationMaster', (req, res) => admin.saveDeviceRegistrationMaster(req, res));
+router.delete('/deviceRegistrationMaster', (req, res) => admin.deleteDeviceRegistrationMaster(req, res));
+//#endregion
+
 module.exports = router;

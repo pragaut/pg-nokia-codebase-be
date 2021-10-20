@@ -36,17 +36,17 @@ fs
 // let's load the subdirectory models too
 console.log('Processing for APP: ', process.env.APP);
 
-if (process.env.APP === 'audit') {
+if (process.env.APP === 'tmc') {
 
-    if (process.env.APP === 'audit') {
+    if (process.env.APP === 'tmc') {
 
         fs
-            .readdirSync(__dirname + '/audit')
+            .readdirSync(__dirname + '/tmc')
             .filter(function (file) {
                 return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
             })
             .forEach(function (file) {
-                var model = sequelize['import'](path.join(__dirname, 'audit', file));
+                var model = sequelize['import'](path.join(__dirname, 'tmc', file));
                 db[model.name] = model;
             });
     }
@@ -77,66 +77,63 @@ Object.keys(db).forEach(function (modelName) {
 
 
 
-if (process.env.APP === 'audit') {
+if (process.env.APP === 'tmc') {
 
     /* reconciliation relationship start */
-    if (process.env.APP === 'audit') {
-        db.escalationDurationMaster.belongsTo(db.masterDetails, { as: 'frequency', foreignKey: 'frequencyMasterId' });
-        db.escalationMatrix.belongsTo(db.masterDetails, { as: 'frequency', foreignKey: 'frequencyMasterId' });
-        db.escalationMatrix.belongsTo(db.notificationDetails, { as: 'notificationMaster', foreignKey: 'notificationMasterId' });
-        db.escalationMatrix.belongsTo(db.roleMaster, { as: 'role', foreignKey: 'roleId' });
-        db.escalationMatrix.belongsTo(db.escalationDurationMaster, { as: 'duration', foreignKey: 'durationMasterId' });
-        db.supportingDocumentMaster.belongsTo(db.masterDetails, { as: 'category', foreignKey: 'documentCategoryId' });
-        // db.mediaDetails.belongsTo(db.supportingDocumentMaster, { as: 'supportingdoctype', foreignKey: 'supportingDocumentMasterId' });
+    if (process.env.APP === 'tmc') {
+         db.towerMaster.belongsTo(db.organisationDetails, { as: 'orgName', foreignKey: 'orgDetailsId' });
+         db.towerMaster.belongsTo(db.cityMaster, { as: 'cityName', foreignKey: 'cityId' });
+         db.towerAllotmentMaster.belongsTo(db.towerMaster, { as: 'towerName', foreignKey: 'towerId' });
+         db.towerAllotmentMaster.belongsTo(db.organisationDetails, { as: 'orgName', foreignKey: 'orgDetailsId' });
+         db.towerAntennasMaster.belongsTo(db.towerMaster, { as: 'towerName', foreignKey: 'towerId' });
+         db.deviceRegistrationMaster.belongsTo(db.organisationDetails, { as: 'orgName', foreignKey: 'orgDetailsId' });
+        // db.mediaLogDetails.belongsTo(db.supportingDocumentMaster, { as: 'SupportingDocumentMaster', foreignKey: 'supportingDocumentMasterId' });
+        // db.sectionMaster.belongsTo(db.auditType, { as: 'auditType', foreignKey: 'auditTypeId' });
+        // db.subSectionMaster.belongsTo(db.sectionMaster, { as: 'section', foreignKey: 'sectionMasterId' });
+        // db.scoringRuleMaster.belongsTo(db.sectionMaster, { as: 'section', foreignKey: 'sectionMasterid' });
+        // db.scoringRuleMaster.belongsTo(db.criticalityMaster, { as: 'criticality', foreignKey: 'criticalityMasterId' });
+        // db.scoringRuleMaster.belongsTo(db.auditObservationMaster, { as: 'auditObservation', foreignKey: 'observationMasterId' });
+        // db.processFlowMaster.belongsTo(db.auditFlow, { as: 'auditFlow', foreignKey: 'auditFlowMasterId' });
+        // db.processFlowMaster.belongsTo(db.processFlowMaster, { as: 'processFlow', foreignKey: 'sendBackProcessFlowMasterId' });
 
-        // db.invoiceAcceptanceLogDetails.belongsTo(db.invoiceLogDetails, { as: 'InvoiceAcceptancelogDetail', foreignKey: 'invoiceLogDetailsId' });
-        db.mediaLogDetails.belongsTo(db.supportingDocumentMaster, { as: 'SupportingDocumentMaster', foreignKey: 'supportingDocumentMasterId' });
-        db.sectionMaster.belongsTo(db.auditType, { as: 'auditType', foreignKey: 'auditTypeId' });
-        db.subSectionMaster.belongsTo(db.sectionMaster, { as: 'section', foreignKey: 'sectionMasterId' });
-        db.scoringRuleMaster.belongsTo(db.sectionMaster, { as: 'section', foreignKey: 'sectionMasterid' });
-        db.scoringRuleMaster.belongsTo(db.criticalityMaster, { as: 'criticality', foreignKey: 'criticalityMasterId' });
-        db.scoringRuleMaster.belongsTo(db.auditObservationMaster, { as: 'auditObservation', foreignKey: 'observationMasterId' });
-        db.processFlowMaster.belongsTo(db.auditFlow, { as: 'auditFlow', foreignKey: 'auditFlowMasterId' });
-        db.processFlowMaster.belongsTo(db.processFlowMaster, { as: 'processFlow', foreignKey: 'sendBackProcessFlowMasterId' });
-
-        db.scopeMaster.belongsTo(db.sectionMaster, { as: 'section', foreignKey: 'sectionMasterId' });
-        db.scopeMaster.belongsTo(db.subSectionMaster, { as: 'subsection', foreignKey: 'subSectionMasterId' });
-        db.scopeMaster.belongsTo(db.criticalityMaster, { as: 'criticality', foreignKey: 'criticalityMasterId' });
-        db.scopeMaster.belongsTo(db.masterDetails, { as: 'auditMode', foreignKey: 'auditModeMasterId' });
+        // db.scopeMaster.belongsTo(db.sectionMaster, { as: 'section', foreignKey: 'sectionMasterId' });
+        // db.scopeMaster.belongsTo(db.subSectionMaster, { as: 'subsection', foreignKey: 'subSectionMasterId' });
+        // db.scopeMaster.belongsTo(db.criticalityMaster, { as: 'criticality', foreignKey: 'criticalityMasterId' });
+        // db.scopeMaster.belongsTo(db.masterDetails, { as: 'auditMode', foreignKey: 'auditModeMasterId' });
 
 
         // db.auditObservationDetails.belongsTo(db.scopeMaster,{as :'scopeAuditobservation',foreignKey:'scopeMasterId'});
         //db.mediaDetails.belongsTo(db.scopeMaster,{as :'scoreMedia',foreignKey:'scopeMasterId'});
 
-        db.scopeMaster.hasOne(db.auditObservationDetails, { as: 'scopeAuditobservation', foreignKey: 'scopeMasterId' });
-        //db.auditObservationDetails.belongsTo(db.selfAuditPlanDetails,{as :'scopeAuditobservations',foreignKey:'auditPlanDetailsId'});
+        // db.scopeMaster.hasOne(db.auditObservationDetails, { as: 'scopeAuditobservation', foreignKey: 'scopeMasterId' });
+        // //db.auditObservationDetails.belongsTo(db.selfAuditPlanDetails,{as :'scopeAuditobservations',foreignKey:'auditPlanDetailsId'});
 
-        db.scopeMaster.hasMany(db.mediaDetails, { as: 'scoreMedia', foreignKey: 'scopeMasterId' });
-        //db.scopeMaster.hasOne(db.masterDetails,{as :'auditMode',foreignKey:'auditModeMasterId'});
+        // db.scopeMaster.hasMany(db.mediaDetails, { as: 'scoreMedia', foreignKey: 'scopeMasterId' });
+        // //db.scopeMaster.hasOne(db.masterDetails,{as :'auditMode',foreignKey:'auditModeMasterId'});
 
-        //db.auditObservationDetails.belongsTo(db.scopeMaster,{as :'scopeAuditobservation',foreignKey:'scopeMasterId'});
-        //db.auditObservationDetails.belongsTo(db.selfAuditPlanDetails,{as :'scope_AuditPlanDetails',foreignKey:'auditPlanDetailsId'});
+        // //db.auditObservationDetails.belongsTo(db.scopeMaster,{as :'scopeAuditobservation',foreignKey:'scopeMasterId'});
+        // //db.auditObservationDetails.belongsTo(db.selfAuditPlanDetails,{as :'scope_AuditPlanDetails',foreignKey:'auditPlanDetailsId'});
 
-        db.processFlowResponsibilityMaster.belongsTo(db.processFlowMaster, { as: 'processFlow', foreignKey: 'processFlowMasterId' });
-        db.processFlowResponsibilityMaster.belongsTo(db.roleMaster, { as: 'role', foreignKey: 'roleMasterId' });
-        db.processFlowResponsibilityMaster.belongsTo(db.companyMaster, { as: 'company', foreignKey: 'companyMasterId' });
-        db.processFlowResponsibilityMaster.belongsTo(db.plantMaster, { as: 'plant', foreignKey: 'plantMasterId' });
-        db.processFlowResponsibilityMaster.belongsTo(db.user, { as: 'user', foreignKey: 'employeeMasterId' });
-        db.companyMaster.belongsTo(db.yearTypeMaster, { as: 'yearType', foreignKey: 'yearTypeMasterId' });
-        db.selfAuditPlanDetails.belongsTo(db.companyMaster, { as: 'company', foreignKey: 'companyMasterId' });
-        db.selfAuditPlanDetails.belongsTo(db.plantMaster, { as: 'plant', foreignKey: 'plantMasterId' });
-        db.selfAuditPlanDetails.belongsTo(db.selfAuditPlanBasicDetails, { as: 'selfBasisDetails', foreignKey: 'selfAuditPlanBasicDetailsId' });
-        db.selfAuditPlanDetails.belongsTo(db.user, { as: 'user', foreignKey: 'leadAuditorId' });
+        // db.processFlowResponsibilityMaster.belongsTo(db.processFlowMaster, { as: 'processFlow', foreignKey: 'processFlowMasterId' });
+        // db.processFlowResponsibilityMaster.belongsTo(db.roleMaster, { as: 'role', foreignKey: 'roleMasterId' });
+        // db.processFlowResponsibilityMaster.belongsTo(db.companyMaster, { as: 'company', foreignKey: 'companyMasterId' });
+        // db.processFlowResponsibilityMaster.belongsTo(db.plantMaster, { as: 'plant', foreignKey: 'plantMasterId' });
+        // db.processFlowResponsibilityMaster.belongsTo(db.user, { as: 'user', foreignKey: 'employeeMasterId' });
+        // db.companyMaster.belongsTo(db.yearTypeMaster, { as: 'yearType', foreignKey: 'yearTypeMasterId' });
+        // db.selfAuditPlanDetails.belongsTo(db.companyMaster, { as: 'company', foreignKey: 'companyMasterId' });
+        // db.selfAuditPlanDetails.belongsTo(db.plantMaster, { as: 'plant', foreignKey: 'plantMasterId' });
+        // db.selfAuditPlanDetails.belongsTo(db.selfAuditPlanBasicDetails, { as: 'selfBasisDetails', foreignKey: 'selfAuditPlanBasicDetailsId' });
+        // db.selfAuditPlanDetails.belongsTo(db.user, { as: 'user', foreignKey: 'leadAuditorId' });
 
-        db.auditObservationDetails.belongsTo(db.selfAuditPlanDetails, { as: 'SelfAuditobservation', foreignKey: 'auditPlanDetailsId' });
-        db.auditObservationDetails.belongsTo(db.scopeMaster, { as: 'scopeMaster', foreignKey: 'scopeMasterId' })
-        db.auditObservationDetails.belongsTo(db.auditObservationMaster, { as: 'observationMaster', foreignKey: 'auditObservationMasterId' })
-        db.auditPlanDetails.belongsTo(db.selfAuditPlanDetails, { as: 'finalAuditPlans', foreignKey: 'selfAuditPlanDetailsId' })
-        db.selfAuditPlanDetails.hasOne(db.auditPlanDetails, { as: 'finalAuditPlan', foreignKey: 'selfAuditPlanDetailsId' })
+        // db.auditObservationDetails.belongsTo(db.selfAuditPlanDetails, { as: 'SelfAuditobservation', foreignKey: 'auditPlanDetailsId' });
+        // db.auditObservationDetails.belongsTo(db.scopeMaster, { as: 'scopeMaster', foreignKey: 'scopeMasterId' })
+        // db.auditObservationDetails.belongsTo(db.auditObservationMaster, { as: 'observationMaster', foreignKey: 'auditObservationMasterId' })
+        // db.auditPlanDetails.belongsTo(db.selfAuditPlanDetails, { as: 'finalAuditPlans', foreignKey: 'selfAuditPlanDetailsId' })
+        // db.selfAuditPlanDetails.hasOne(db.auditPlanDetails, { as: 'finalAuditPlan', foreignKey: 'selfAuditPlanDetailsId' })
 
-        db.processFlowCompletionHistoryDetails.belongsTo(db.processFlowCompletionDetails, { as: 'processFlowCompletionHistoryDetails', foreignKey: 'processFlowCompletionDetailsId' })
-        db.processFlowCompletionDetails.hasOne(db.processFlowCompletionHistoryDetails, { as: 'processFlowCompletionHistoryDetails', foreignKey: 'processFlowCompletionDetailsId' })
-        db.auditObservationDetails.belongsTo(db.auditPlanDetails, { as: 'AuditPlanDetails', foreignKey: 'auditPlanDetailsId' })
+        // db.processFlowCompletionHistoryDetails.belongsTo(db.processFlowCompletionDetails, { as: 'processFlowCompletionHistoryDetails', foreignKey: 'processFlowCompletionDetailsId' })
+        // db.processFlowCompletionDetails.hasOne(db.processFlowCompletionHistoryDetails, { as: 'processFlowCompletionHistoryDetails', foreignKey: 'processFlowCompletionDetailsId' })
+        // db.auditObservationDetails.belongsTo(db.auditPlanDetails, { as: 'AuditPlanDetails', foreignKey: 'auditPlanDetailsId' })
     }
     /* reconciliation relationship end */
 }

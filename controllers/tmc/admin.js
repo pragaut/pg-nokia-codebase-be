@@ -663,23 +663,24 @@ const getDeviceRegistrationMaster = async (req, res) => {
 * @param {*} res 
 */
 
-const _FindDeviceregistrationMasterAlreadyExistOrNot = async (id, orgDetailsId) => {
+const _FindDeviceregistrationMasterAlreadyExistOrNot = async (id, macAddress) => {
     let where = [];
     if (id && id !== null && id !== 'undefined') {
         where.push(util.constructWheresForNotEqualSequelize('id', id));
     }
     where.push(util.constructWheresForSequelize('isActive', 1));
-    where.push(util.constructWheresForSequelize('orgDetailsId', orgDetailsId));
+    where.push(util.constructWheresForSequelize('macAddress', macAddress));
 
     const deviceregistrationMasterDetails = await dal.getList({ model: db.deviceRegistrationMaster, where, order: [['createdAt', 'desc']], include: false, });
     if (deviceregistrationMasterDetails && deviceregistrationMasterDetails.length > 0) {
+        console.log("deviceregistrationMasterDetails : 1 >",deviceregistrationMasterDetails);
         return 'already exist'
     }
     else {
+        console.log("deviceregistrationMasterDetails : 2 >",deviceregistrationMasterDetails);
         return 'success'
     }
 }
-
 const saveDeviceRegistrationMaster = async (req, res) => {
     try {
         const deviceRegistrationMaster = req.body;
@@ -687,8 +688,8 @@ const saveDeviceRegistrationMaster = async (req, res) => {
 
         console.log("Device Registration : ", deviceRegistrationMaster);
         const PKID = deviceRegistrationMaster && deviceRegistrationMaster.id ? deviceRegistrationMaster.id : undefined;
-        const ChekAlreadyExist = await _FindDeviceregistrationMasterAlreadyExistOrNot(PKID, deviceRegistrationMaster.orgDetailsId);
-        let CodeMsg = deviceRegistrationMaster && deviceRegistrationMaster.orgDetailsId ? 'Tower  "' + deviceRegistrationMaster.orgDetailsId + '" already in use' : 'Device Registration already in use';
+        const ChekAlreadyExist = await _FindDeviceregistrationMasterAlreadyExistOrNot(PKID, deviceRegistrationMaster.macAddress);
+        let CodeMsg = deviceRegistrationMaster && deviceRegistrationMaster.orgDetailsId ? 'Device Registration "' + deviceRegistrationMaster.macAddress + '" already in use' : 'Device Registration already in use';
         if (ChekAlreadyExist && ChekAlreadyExist !== "success") throw util.generateWarning(CodeMsg, codes.CODE_ALREADY_EXISTS);
 
         // let lastOrder = 0;
@@ -715,7 +716,6 @@ const saveDeviceRegistrationMaster = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'saving Device Registration master details');
     }
 };
-
 const deleteDeviceRegistrationMaster = async (req, res) => {
     try {
         if (req.user && req.user.id !== null)
@@ -729,7 +729,6 @@ const deleteDeviceRegistrationMaster = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'deleting Device Registration master details');
     }
 };
-
 //#endregion
  
 module.exports.saveNotificationDetailsMaster = saveNotificationDetailsMaster;

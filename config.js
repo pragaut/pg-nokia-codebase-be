@@ -80,6 +80,9 @@ const config = {
 		'admin': {
 			all: true
 		}, 
+		'tmcworking-antennarotationdetails' : {
+			all: true
+		}
 		// 'chimpmail-update-mailchimp': {
 		// 	all: true
 		// },

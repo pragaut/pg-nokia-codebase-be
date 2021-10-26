@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 const util = require('../../util');
-const admin = require('../../controllers/tmc/admin');
+const admin = require('../../controllers/nokia/admin');
 
 //#region Notification  master
 router.get('/notificationDetails', (req, res) => admin.getNotificationDetailsMaster(req, res));

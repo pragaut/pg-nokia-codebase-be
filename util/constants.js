@@ -40,14 +40,14 @@ module.exports = {
             AUDIT: 'audit'
         }
     },
-    TMC: {
+    NOKIA: {
         LINE_ITEM_STATUS: {
             //DELIVERED: 'delivered',
             //RETURNED: 'returned'
         },
 
         HOST_NAME: {
-            TMC: 'tmc'
+            NOKIA: 'nokia'
         }
     }, 
 

@@ -36,17 +36,17 @@ fs
 // let's load the subdirectory models too
 console.log('Processing for APP: ', process.env.APP);
 
-if (process.env.APP === 'tmc') {
+if (process.env.APP === 'nokia') {
 
-    if (process.env.APP === 'tmc') {
+    if (process.env.APP === 'nokia') {
 
         fs
-            .readdirSync(__dirname + '/tmc')
+            .readdirSync(__dirname + '/nokia')
             .filter(function (file) {
                 return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
             })
             .forEach(function (file) {
-                var model = sequelize['import'](path.join(__dirname, 'tmc', file));
+                var model = sequelize['import'](path.join(__dirname, 'nokia', file));
                 db[model.name] = model;
             });
     }
@@ -77,10 +77,10 @@ Object.keys(db).forEach(function (modelName) {
 
 
 
-if (process.env.APP === 'tmc') {
+if (process.env.APP === 'nokia') {
 
     /* reconciliation relationship start */
-    if (process.env.APP === 'tmc') {
+    if (process.env.APP === 'nokia') {
          db.towerMaster.belongsTo(db.organisationDetails, { as: 'orgName', foreignKey: 'orgDetailsId' });
          db.towerMaster.belongsTo(db.cityMaster, { as: 'cityName', foreignKey: 'cityId' });
          db.towerAllotmentMaster.belongsTo(db.towerMaster, { as: 'towerName', foreignKey: 'towerId' });

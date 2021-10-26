@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 const util = require('../../util');
-const working = require('../../controllers/tmc/working');
+const working = require('../../controllers/nokia/working');
 
 //#region Antenna Rotataion Details
 router.get('/antennaRotationDetails', (req, res) => working.getAntennaRotataionDetails(req, res));

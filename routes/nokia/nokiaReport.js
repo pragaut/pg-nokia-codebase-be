@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 const util = require('../../util');
-const report = require('../../controllers/tmc/report');
+const report = require('../../controllers/nokia/report');
  
 
 //#region  Self Vs Final Score Plant Wise

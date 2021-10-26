@@ -1,7 +1,7 @@
 const { db } = require('../../models');
 const dal = require('../../dal');
 const Op = require('sequelize').Op;
-const util = require('../../util/');
+const util = require('../../util');
 const responseHelper = require('../../util/response.helper');
 const config = require('../../config').config;
 const encryptionHelper = require('../../util/encryption.helper');

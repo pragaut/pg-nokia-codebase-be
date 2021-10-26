@@ -478,8 +478,8 @@ const assignHostNameToReq = req => {
     try {
         const origin = req.get('origin');
         console.log("origin : ", origin);
-        console.log("process.env.DOMAIN_TMC : ", process.env.DOMAIN_TMC);
-        if(process.env.DOMAIN_TMC === origin)
+        console.log("process.env.DOMAIN_NOKIA : ", process.env.DOMAIN_NOKIA);
+        if(process.env.DOMAIN_NOKIA === origin)
         {
             console.log("cs 1");
         }
@@ -489,8 +489,8 @@ const assignHostNameToReq = req => {
         }
         if (origin) {
             switch (origin) {
-                case process.env.DOMAIN_TMC:
-                    req.HostName = constants.TMC.HOST_NAME.TMC;
+                case process.env.DOMAIN_NOKIA:
+                    req.HostName = constants.NOKIA.HOST_NAME.NOKIA;
                    break;
             }
         }

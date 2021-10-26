@@ -9,7 +9,7 @@ const entry = async (req, res, next) => {
     try {
         // let's get the auth url
         let originalUrl = req.originalUrl;
-        const url = process.env.AUTH_URL + (originalUrl.slice(9, originalUrl.length));
+        const url = process.env.AUTH_URL + (originalUrl.slice(11, originalUrl.length));
 	//const url = process.env.AUTH_URL + originalUrl;
 
          console.log("req originalUrl",req.originalUrl);

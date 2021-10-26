@@ -57,8 +57,8 @@ module.exports.upload = upload;
 const init = async (app, _staticPath, _appName = 'shopping') => {
 	staticPath = _staticPath || 'uploads/';
 	 console.log("_appName i,g ", _appName);
-	let PostURL = process.env.DOMAIN_TMC
-	app.post('/api-tmc/' + _appName + '/imageUpload', upload.array('image', 200), async function (req, res) {
+	let PostURL = process.env.DOMAIN_NOKIA
+	app.post('/api-nokia/' + _appName + '/imageUpload', upload.array('image', 200), async function (req, res) {
 		//console.log("Sucess:file upload multiple");
 		//console.log("Sucess:file upload multiple req",JSON.parse(JSON.stringify(req.body.image)))
 		//console.log("Sucess:file upload multiple req", req.files )

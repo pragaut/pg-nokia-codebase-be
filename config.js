@@ -80,7 +80,7 @@ const config = {
 		'admin': {
 			all: true
 		}, 
-		'tmcworking-antennarotationdetails' : {
+		'nokiaworking-antennarotationdetails' : {
 			all: true
 		}
 		// 'chimpmail-update-mailchimp': {

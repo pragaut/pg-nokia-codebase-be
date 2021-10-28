@@ -1,6 +1,6 @@
 const { db } = require('../../models');
 const dal = require('../../dal');
-const util = require('../../util/');
+const util = require('../../util');
 const responseHelper = require('../../util/response.helper');
 const codes = require('../../util/codes').codes;
 

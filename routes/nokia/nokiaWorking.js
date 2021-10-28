@@ -10,6 +10,13 @@ router.put('/antennaRotationDetails', (req, res) => working.saveAntennaRotationD
 router.post('/antennaRotationDetails', (req, res) => working.saveAntennaRotationDetails(req, res));
 
 //#endregion
+
+//#region Antenna Rotataion Details
+
+router.get('/antennaRotationDetailLogs', (req, res) => working.getAntennaRotataionDetailLogs(req, res)); 
+
+//#endregion
+
 //#region Device Location Details
 
 router.get('/deviceLocationDetails', (req, res) => working.getDeviceLocationDetails(req, res));

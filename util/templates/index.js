@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../../config').config;
-const constants = require('../../util/constants');
-const utils = require('../../util');
+const constants = require('../constants');
+const utils = require('..');
 /**
  * 
  * @param {*} type the template type, like Register, Change Password

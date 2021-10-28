@@ -282,7 +282,6 @@ const saveAntennaRotationDetails_FromBody = async (req, res) => {
        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving Antenna Rotation Details');
    }
 };
-
 const saveAntennaRotationDetails_FromQuery = async (req, res) => {
     try {
         const antennaRotationDetails = req.query;
@@ -337,6 +336,28 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
     }
 };
 
+//#endregion
+//#region AISU Anteena Detail Logs
+
+const getAntennaRotataionDetailLogs = async (req, res) => {
+    try {
+        console.log("getAntennaRotataionDetailLogs backend :",req.query)
+        db.sequelize.query('call asp_nk_antenna_rotation_log_get_antenna_rotation_logs_details(:p_antenna_rotation_details_id, :p_antenna_rotation_details_id)',
+            {
+                replacements: {
+                    p_antenna_rotation_details_id: req.query. antennaRotationDetailsId ? req.query.antennaRotationDetailsId : '', 
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'Tower antenna rotation detail log get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower antenna rotation detail logs');
+
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower antenna rotation detail logs');
+    }
+}; 
 //#endregion
 
 //#region Device Location Details

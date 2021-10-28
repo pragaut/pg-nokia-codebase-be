@@ -2,7 +2,7 @@ const fso = require('fs'); //file system object to operate through the log files
 const config = require('../config').config;
 const fileHelper = require('./file.helper');
 const email = require('./email');
-const util = require('./');
+const util = require('.');
 const path = require('path');
 
 _fileName = '';

@@ -295,7 +295,7 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
         const ChekAlreadyExist = await _FindAntennaRotationDetailsAlreadyExistOrNot(towerAntennaId);
         if (ChekAlreadyExist && ChekAlreadyExist !== "success") 
         {
-            let  antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId);
+            let  antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId,undefined);
             if(antennsRotationDetail && antennsRotationDetail !==null && antennsRotationDetail.length > 0)
             {
                 antennaRotationDetails.id=antennsRotationDetail.antennaRotationDetailId;

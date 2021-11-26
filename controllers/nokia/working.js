@@ -320,15 +320,17 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
                 const saveAntennaRotationDetails = await dal.saveData(db.antennaRotationLogDetails, antennaRotationLogsDetails, undefined, UserId);
             }            
         }
+        
+        responseHelper.success(antennaRotationDetails, codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
         //-----let primaryKey = 'antennaRotationDetailId';
         if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
          const response =  await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);
-         responseHelper.success(res, codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
+         //responseHelper.success(res, codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
       
         }
         else {
             console.log("Backend Antenna Rotation Details Data else condition", req)
-            responseHelper.success(res, codes.ERROR, "FAIL",'Antenna Rotation Details Not Saved','-1',0);
+            //responseHelper.success(res, codes.ERROR, "FAIL",'Antenna Rotation Details Not Saved','-1',0);
         }
     }
     catch (error) {

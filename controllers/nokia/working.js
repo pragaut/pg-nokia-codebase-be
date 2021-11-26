@@ -8,6 +8,7 @@ const encryptionHelper = require('../../util/encryption.helper');
 const codes = require('../../util/codes').codes;
 const constants = require('../../util/constants');
 const emailService = require('../../util/email');
+const { json } = require('express');
 
 //#region Notification Helper //To be used in Audit notification
 
@@ -322,7 +323,7 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
             }            
         }
         
-        responseHelper.success(antennaRotationDetails, codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
+        responseHelper.success(json.stringify(antennaRotationDetails), codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
         //-----let primaryKey = 'antennaRotationDetailId';
         //if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
          //const response =  await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);

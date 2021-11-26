@@ -323,7 +323,7 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
             }            
         }
         
-        responseHelper.success(json.stringify(antennaRotationDetails), codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
+        responseHelper.success(JSON.stringify(antennaRotationDetails), codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
         //-----let primaryKey = 'antennaRotationDetailId';
         //if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
          //const response =  await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);

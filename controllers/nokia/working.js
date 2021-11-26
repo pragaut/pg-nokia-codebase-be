@@ -216,7 +216,7 @@ const getAntennaRotationDetails_byTowerID = async (towerAntennaId, res) => {
 };
 const _FindAntennaRotationDetailsAlreadyExistOrNot = async (towerAntennaId) => {
     let where = [];
-    if (id && id !== null && id !== 'undefined') {
+    if (towerAntennaId && towerAntennaId !== null && towerAntennaId !== 'undefined') {
         where.push(util.constructWheresForNotEqualSequelize('towerAntennaId', towerAntennaId));
     }
     where.push(util.constructWheresForSequelize('isActive', 1)); 
@@ -337,6 +337,7 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
 };
 
 //#endregion
+
 //#region AISU Anteena Detail Logs
 
 const getAntennaRotataionDetailLogs = async (req, res) => {

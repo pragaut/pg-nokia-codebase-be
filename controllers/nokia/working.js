@@ -174,7 +174,7 @@ const deleteMediaDetails = async (req, res) => {
 
 const getAntennaRotataionDetails = async (req, res) => {
     try {
-        console.log("getAntennaRotataionDetails backend :",req.query)
+        console.log("getAntennaRotataionDetails backend :", req.query)
         db.sequelize.query('call asp_nk_antenna_rotation_get_antenna_rotation_details(:p_antenna_rotation_details_id, :p_tower_antenna_id, :p_tower_id, :p_mac_or_antenna_code)',
             {
                 replacements: {
@@ -195,35 +195,54 @@ const getAntennaRotataionDetails = async (req, res) => {
     }
 };
 const getAntennaRotationDetails_byTowerID = async (towerAntennaId, res) => {
-    try { 
-        db.sequelize.query('call asp_nk_antenna_rotation_get_antenna_rotation_details(:p_antenna_rotation_details_id, :p_tower_antenna_id, :p_tower_id, :p_mac_or_antenna_code)',
-            {
-                replacements: {
-                    p_antenna_rotation_details_id: '',
-                    p_tower_antenna_id: towerAntennaId ? towerAntennaId : '',
-                    p_tower_id: '',
-                    p_mac_or_antenna_code: ''
-                }
-            }).then(results => {
-                return results;
-               // responseHelper.success(res, 200, results, 'Tower antenna rotation details get successfully', '-1', results.length);
-            }).catch(err => {
-                //responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower antenna rotation details');
-                return err;
-            });
+    try {
+
+        let where = [];
+        where.push(util.constructWheresForSequelize('isActive', 1));
+        where.push(util.constructWheresForSequelize('towerAntennaId', towerAntennaId));
+        const resultData = await dal.getList({ model: db.antennaRotationDetails, where, order: [['createdAt', 'desc']], include: false, rowsToReturn: 1, pageIndex: 0, undefined });
+        if (resultData) {
+           // console.log("results ---------1----------", resultData);
+            const dataoindex = resultData && resultData[0];
+            return dataoindex;
+        }
+        else {
+            return undefined;
+        }
+
+        // db.sequelize.query('call asp_nk_antenna_rotation_get_antenna_rotation_details(:p_antenna_rotation_details_id, :p_tower_antenna_id, :p_tower_id, :p_mac_or_antenna_code)',
+        //     {
+        //         replacements: {
+        //             p_antenna_rotation_details_id: '',
+        //             p_tower_antenna_id: towerAntennaId ? towerAntennaId : '',
+        //             p_tower_id: '',
+        //             p_mac_or_antenna_code: ''
+        //         }
+        //     }).then(results => {
+        //         console.log("results ---------1----------", results);
+        //         const dataoindex = results && results[0];
+        //         console.log("results ---------2----------", dataoindex);
+        //         return dataoindex;
+        //         // responseHelper.success(res, 200, results, 'Tower antenna rotation details get successfully', '-1', results.length);
+        //     }).catch(err => {
+        //         //responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower antenna rotation details');
+        //         return err;
+        //     });
     }
     catch (error) {
-        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower antenna rotation details');
+        return error;
     }
 };
 const _FindAntennaRotationDetailsAlreadyExistOrNot = async (towerAntennaId) => {
+    //console.log("tower Antenna Id : -----", towerAntennaId);
     let where = [];
     if (towerAntennaId && towerAntennaId !== null && towerAntennaId !== 'undefined') {
-        where.push(util.constructWheresForNotEqualSequelize('towerAntennaId', towerAntennaId));
+        where.push(util.constructWheresForSequelize('towerAntennaId', towerAntennaId));
     }
-    where.push(util.constructWheresForSequelize('isActive', 1)); 
-
+    where.push(util.constructWheresForSequelize('isActive', 1));
+    //console.log("where : *********", where);
     const antennaRotationDetails = await dal.getList({ model: db.antennaRotationDetails, where, order: [['createdAt', 'desc']], include: false, });
+
     if (antennaRotationDetails && antennaRotationDetails.length > 0) {
         return 'already exist'
     }
@@ -237,103 +256,124 @@ const saveAntennaRotationDetails_FromBody = async (req, res) => {
         var antennaRotationLogsDetails = [];
         console.log("Antenna Rotation Details : ", antennaRotationDetails);
         if (req.user && req.user.id !== null)
-        UserId = req.user.id;
+            UserId = req.user.id;
         //const PKID = antennaRotationDetails && antennaRotationDetails.id ? antennaRotationDetails.id : undefined;
         const towerAntennaId = antennaRotationDetails && antennaRotationDetails.towerAntennaId ? antennaRotationDetails.towerAntennaId : undefined;
         const ChekAlreadyExist = await _FindAntennaRotationDetailsAlreadyExistOrNot(towerAntennaId);
-        if (ChekAlreadyExist && ChekAlreadyExist !== "success") 
-        {
-            let  antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId);
-            if(antennsRotationDetail && antennsRotationDetail !==null && antennsRotationDetail.length > 0)
-            {
-                antennaRotationDetails.id=antennsRotationDetail.antennaRotationDetailId;
-                let antennsRotationLogDetail  = {
-                    antennaRotationDetailId : antennsRotationDetail.antennaRotationDetailId,
-                    towerAntennaId : antennsRotationDetail.towerAntennaId,
-                    macOrAntennaCode : antennsRotationDetail.macOrAntennaCode,
-                    azimuth : antennsRotationDetail.azimuth,
-                    height : antennsRotationDetail.height,
-                    direction : antennsRotationDetail.direction,
-                    tiltX : antennsRotationDetail.tiltX,
-                    tiltY : antennsRotationDetail.tiltY,    
-                    tiltZ : antennsRotationDetail.tiltZ,
-                    azimuthPrev : antennsRotationDetail.azimuthPrev,
-                    heightPrev : antennsRotationDetail.heightPrev,
-                    directionPrev : antennsRotationDetail.directionPrev,
-                    tiltXPrev : antennsRotationDetail.tiltXPrev,
-                    tiltYPrev : antennsRotationDetail.tiltYPrev,
-                    tiltZPrev : antennsRotationDetail.tiltZPrev,
-                    isActive : true
+        if (ChekAlreadyExist && ChekAlreadyExist !== "success") {
+            let antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId);
+            if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail.length > 0) {
+                antennaRotationDetails.id = antennsRotationDetail.antennaRotationDetailId;
+                let antennsRotationLogDetail = {
+                    antennaRotationDetailId: antennsRotationDetail.antennaRotationDetailId,
+                    towerAntennaId: antennsRotationDetail.towerAntennaId,
+                    macOrAntennaCode: antennsRotationDetail.macOrAntennaCode,
+                    azimuth: antennsRotationDetail.azimuth,
+                    height: antennsRotationDetail.height,
+                    direction: antennsRotationDetail.direction,
+                    tiltX: antennsRotationDetail.tiltX,
+                    tiltY: antennsRotationDetail.tiltY,
+                    tiltZ: antennsRotationDetail.tiltZ,
+                    azimuthPrev: antennsRotationDetail.azimuthPrev,
+                    heightPrev: antennsRotationDetail.heightPrev,
+                    directionPrev: antennsRotationDetail.directionPrev,
+                    tiltXPrev: antennsRotationDetail.tiltXPrev,
+                    tiltYPrev: antennsRotationDetail.tiltYPrev,
+                    tiltZPrev: antennsRotationDetail.tiltZPrev,
+                    isActive: true
                 }
                 antennaRotationLogsDetails.push(antennsRotationLogDetail);
                 const saveAntennaRotationDetails = await dal.saveData(db.antennaRotationLogDetails, antennaRotationLogsDetails, undefined, UserId);
-            }            
+            }
         }
-      //-----let primaryKey = 'antennaRotationDetailId';
-      if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
-        const response =  await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);
-        responseHelper.success(res, codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
-     
-       }
-       else {
-           console.log("Backend Antenna Rotation Details Data else condition", req)
-           responseHelper.success(res, codes.ERROR, "FAIL",'Antenna Rotation Details Not Saved','-1',0);
-       }
-   }
-   catch (error) {
-       responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving Antenna Rotation Details');
-   }
+        //-----let primaryKey = 'antennaRotationDetailId';
+        if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
+            const response = await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);
+            responseHelper.success(res, codes.SUCCESS, "Success", 'Antenna Rotation Details Save Successfully', '-1', 1);
+
+        }
+        else {
+            console.log("Backend Antenna Rotation Details Data else condition", req)
+            responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving Antenna Rotation Details');
+    }
 };
 const saveAntennaRotationDetails_FromQuery = async (req, res) => {
     try {
         const antennaRotationDetails = req.query;
         var antennaRotationLogsDetails = [];
-        console.log("Antenna Rotation Details : ", antennaRotationDetails);
+        //console.log("Antenna Rotation Details : ", antennaRotationDetails);
         if (req.query && req.query.userId !== null)
-        UserId = req.query.userId;
+            UserId = req.query.userId;
         //const PKID = antennaRotationDetails && antennaRotationDetails.id ? antennaRotationDetails.id : undefined;
         const towerAntennaId = antennaRotationDetails && antennaRotationDetails.towerAntennaId ? antennaRotationDetails.towerAntennaId : undefined;
         const ChekAlreadyExist = await _FindAntennaRotationDetailsAlreadyExistOrNot(towerAntennaId);
-        if (ChekAlreadyExist && ChekAlreadyExist !== "success") 
-        {
-            let  antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId,undefined);
-            if(antennsRotationDetail && antennsRotationDetail !==null && antennsRotationDetail.length > 0)
-            {
-                antennaRotationDetails.id=antennsRotationDetail.antennaRotationDetailId;
-                let antennsRotationLogDetail  = {
-                    antennaRotationDetailId : antennsRotationDetail.antennaRotationDetailId,
-                    towerAntennaId : antennsRotationDetail.towerAntennaId,
-                    macOrAntennaCode : antennsRotationDetail.macOrAntennaCode,
-                    azimuth : antennsRotationDetail.azimuth,
-                    height : antennsRotationDetail.height,
-                    direction : antennsRotationDetail.direction,
-                    tiltX : antennsRotationDetail.tiltX,
-                    tiltY : antennsRotationDetail.tiltY,    
-                    tiltZ : antennsRotationDetail.tiltZ,
-                    azimuthPrev : antennsRotationDetail.azimuthPrev,
-                    heightPrev : antennsRotationDetail.heightPrev,
-                    directionPrev : antennsRotationDetail.directionPrev,
-                    tiltXPrev : antennsRotationDetail.tiltXPrev,
-                    tiltYPrev : antennsRotationDetail.tiltYPrev,
-                    tiltZPrev : antennsRotationDetail.tiltZPrev,
-                    isActive : true
+
+        if (ChekAlreadyExist && ChekAlreadyExist !== "success") {
+            let antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId, undefined);
+            //console.log("antenns Rotation Detail : ----------", antennsRotationDetail);
+            if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail !== 'undefined') {
+                antennaRotationDetails.id = antennsRotationDetail.id;
+                let antennsRotationLogDetail = {
+                    antennaRotationDetailId: antennsRotationDetail.id,
+                    towerAntennaId: antennsRotationDetail.towerAntennaId,
+                    macOrAntennaCode: antennsRotationDetail.macOrAntennaCode,
+                    azimuth: antennsRotationDetail.azimuth,
+                    height: antennsRotationDetail.height,
+                    direction: antennsRotationDetail.direction,
+                    tiltX: antennsRotationDetail.tiltX,
+                    tiltY: antennsRotationDetail.tiltY,
+                    tiltZ: antennsRotationDetail.tiltZ,
+                    azimuthPrev: antennsRotationDetail.azimuthPrev,
+                    heightPrev: antennsRotationDetail.heightPrev,
+                    directionPrev: antennsRotationDetail.directionPrev,
+                    tiltXPrev: antennsRotationDetail.tiltXPrev,
+                    tiltYPrev: antennsRotationDetail.tiltYPrev,
+                    tiltZPrev: antennsRotationDetail.tiltZPrev,
+                    isActive: true
                 }
+                //console.log("antenns Rotation Log Detail : ---------- :", antennsRotationLogDetail);
                 antennaRotationLogsDetails.push(antennsRotationLogDetail);
-                const saveAntennaRotationDetails = await dal.saveData(db.antennaRotationLogDetails, antennaRotationLogsDetails, undefined, UserId);
-            }            
-        }
-        
-        //responseHelper.success(JSON.stringify(antennaRotationDetails), codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
-        //-----let primaryKey = 'antennaRotationDetailId';
-        if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
-         const response =  await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);
-         responseHelper.success(res, codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
-      
+                const saveAntennaRotationDetails = await dal.saveData(db.antennaRotationDetailsLog, antennsRotationLogDetail, undefined, UserId);
+                if (saveAntennaRotationDetails) {
+                    if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
+                        const response = await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, undefined, UserId);
+                        responseHelper.success(res, codes.SUCCESS, "Success", 'Antenna Rotation Details Save Successfully', '-1', 1);
+
+                    }
+                    else {
+                        //console.log("Backend Antenna Rotation Details Data else condition", req)
+                        responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
+                    }
+                }
+                else {
+                    responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
+
+                }
+            }
+            else {
+                responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
+
+            }
         }
         else {
-            console.log("Backend Antenna Rotation Details Data else condition", req)
-            responseHelper.success(res, codes.ERROR, "FAIL",'Antenna Rotation Details Not Saved','-1',0);
+            if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
+                const response = await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, undefined, UserId);
+                responseHelper.success(res, codes.SUCCESS, "Success", 'Antenna Rotation Details Save Successfully', '-1', 1);
+
+            }
+            else {
+                //console.log("Backend Antenna Rotation Details Data else condition", req)
+                responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
+            }
         }
+
+        //responseHelper.success(JSON.stringify(antennaRotationDetails), codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
+        //-----let primaryKey = 'antennaRotationDetailId';
+
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving Antenna Rotation Details');
@@ -346,11 +386,11 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
 
 const getAntennaRotataionDetailLogs = async (req, res) => {
     try {
-        console.log("getAntennaRotataionDetailLogs backend :",req.query)
+        console.log("getAntennaRotataionDetailLogs backend :", req.query)
         db.sequelize.query('call asp_nk_antenna_rotation_log_get_antenna_rotation_logs_details(:p_antenna_rotation_details_id, :p_antenna_rotation_details_id)',
             {
                 replacements: {
-                    p_antenna_rotation_details_id: req.query. antennaRotationDetailsId ? req.query.antennaRotationDetailsId : '', 
+                    p_antenna_rotation_details_id: req.query.antennaRotationDetailsId ? req.query.antennaRotationDetailsId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'Tower antenna rotation detail log get successfully', '-1', results.length);
@@ -362,21 +402,21 @@ const getAntennaRotataionDetailLogs = async (req, res) => {
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower antenna rotation detail logs');
     }
-}; 
+};
 //#endregion
 
 //#region Device Location Details
 
 const getDeviceLocationDetails = async (req, res) => {
     try {
-        console.log("getDeviceLocationDetails backend :",req.query)
+        console.log("getDeviceLocationDetails backend :", req.query)
         db.sequelize.query('call asp_nk_device_location_get_device_location_details(:p_device_location_detail_id, :p_device_registration_detail_id, :p_mac_address)',
             {
                 replacements: {
                     p_device_location_detail_id: req.query.id ? req.query.id : '',
                     p_device_registration_detail_id: req.query.deviceRegistrationDetailsId ? req.query.deviceRegistrationDetailsId : '',
                     p_mac_address: req.query.macAddress ? req.query.macAddress : '',
-                 }
+                }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'Device Location details get successfully', '-1', results.length);
             }).catch(err => {
@@ -386,7 +426,7 @@ const getDeviceLocationDetails = async (req, res) => {
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower device location details');
     }
-};  
+};
 
 //#endregion
 

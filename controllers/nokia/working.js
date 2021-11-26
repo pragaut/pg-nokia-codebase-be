@@ -204,10 +204,11 @@ const getAntennaRotationDetails_byTowerID = async (towerAntennaId, res) => {
                     p_mac_or_antenna_code: ''
                 }
             }).then(results => {
-                responseHelper.success(res, 200, results, 'Tower antenna rotation details get successfully', '-1', results.length);
+                return results;
+               // responseHelper.success(res, 200, results, 'Tower antenna rotation details get successfully', '-1', results.length);
             }).catch(err => {
-                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower antenna rotation details');
-
+                //responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower antenna rotation details');
+                return err;
             });
     }
     catch (error) {

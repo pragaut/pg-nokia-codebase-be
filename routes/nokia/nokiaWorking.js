@@ -7,7 +7,8 @@ const working = require('../../controllers/nokia/working');
 //#region Antenna Rotataion Details
 router.get('/antennaRotationDetails', (req, res) => working.getAntennaRotataionDetails(req, res));
 router.put('/antennaRotationDetails', (req, res) => working.saveAntennaRotationDetails(req, res));
-router.post('/antennaRotationDetails', (req, res) => working.saveAntennaRotationDetails(req, res));
+//router.post('/antennaRotationDetails', (req, res) => working.saveAntennaRotationDetails_FromBody(req, res));
+router.post('/antennaRotationDetails', (req, res) => working.saveAntennaRotationDetails_FromQuery(req, res));
 
 //#endregion
 

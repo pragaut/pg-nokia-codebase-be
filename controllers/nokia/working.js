@@ -302,6 +302,7 @@ const _FindAntennaRotationDetailsAlreadyExistOrNot = async (towerAntennaId) => {
 
 const saveAntennaRotationDetails_FromBody = async (req, res) => {
     try {
+        console.log("post req...");
         console.log("req : ------------>>1", req);
         const antennaRotationDetails = req.body;
         var antennaRotationLogsDetails = [];

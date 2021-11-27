@@ -302,21 +302,21 @@ const _FindAntennaRotationDetailsAlreadyExistOrNot = async (towerAntennaId) => {
 
 const saveAntennaRotationDetails_FromBody = async (req, res) => {
     try {
-        console.log("post req body...");
-        console.log("req : ------------>>1", req);
+        //console.log("post req body...");
+        //console.log("req : ------------>>1", req);
         const antennaRotationDetails = req.body;
         var antennaRotationLogsDetails = [];
-        console.log("Antenna Rotation Details : ------------>>", antennaRotationDetails);
+        //console.log("Antenna Rotation Details : ------------>>", antennaRotationDetails);
         if (req.body && req.body.userId !== null)
             UserId = req.body.userId;
-        console.log("UserId : ------------>>", UserId);
+        //console.log("UserId : ------------>>", UserId);
         //const PKID = antennaRotationDetails && antennaRotationDetails.id ? antennaRotationDetails.id : undefined;
         const towerAntennaId = antennaRotationDetails && antennaRotationDetails.towerAntennaId ? antennaRotationDetails.towerAntennaId : undefined;
         const ChekAlreadyExist = await _FindAntennaRotationDetailsAlreadyExistOrNot(towerAntennaId);
         let antennsRotationDetail = undefined;
         if (ChekAlreadyExist && ChekAlreadyExist !== "success") { 
             antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId, undefined);
-            console.log("antenns Rotation Detail : ---------->>>0", antennsRotationDetail);
+            //console.log("antenns Rotation Detail : ---------->>>0", antennsRotationDetail);
             if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail !== 'undefined') {
                 antennaRotationDetails.id = antennsRotationDetail.id;
             }
@@ -330,7 +330,7 @@ const saveAntennaRotationDetails_FromBody = async (req, res) => {
             }
         }
         antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId, undefined);
-        console.log("antenns Rotation Detail : ---------->>>1", antennsRotationDetail);
+        //console.log("antenns Rotation Detail : ---------->>>1", antennsRotationDetail);
         if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail !== 'undefined') {
             antennaRotationDetails.id = antennsRotationDetail.id;
             let antennsRotationLogDetail = {
@@ -453,21 +453,21 @@ const saveAntennaRotationDetails_FromBody = async (req, res) => {
 
 const saveAntennaRotationDetails_FromQuery = async (req, res) => {
     try {
-        console.log("post req query...");
-        console.log("req : ------------>>1", req);
+        //console.log("post req query...");
+        //console.log("req : ------------>>1", req);
         const antennaRotationDetails =req && req.query;
         var antennaRotationLogsDetails = [];
-        console.log("Antenna Rotation Details : ------------>>", antennaRotationDetails);
+        //console.log("Antenna Rotation Details : ------------>>", antennaRotationDetails);
         if (req.query && req.query.userId !== null)
             UserId = req.query.userId;
-        console.log("UserId : ------------>>", UserId);
+        //console.log("UserId : ------------>>", UserId);
         //const PKID = antennaRotationDetails && antennaRotationDetails.id ? antennaRotationDetails.id : undefined;
         const towerAntennaId = antennaRotationDetails && antennaRotationDetails.towerAntennaId ? antennaRotationDetails.towerAntennaId : undefined;
         const ChekAlreadyExist = await _FindAntennaRotationDetailsAlreadyExistOrNot(towerAntennaId);
         let antennsRotationDetail = undefined;
         if (ChekAlreadyExist && ChekAlreadyExist !== "success") { 
             antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId, undefined);
-            console.log("antenns Rotation Detail : ---------->>>0", antennsRotationDetail);
+            //console.log("antenns Rotation Detail : ---------->>>0", antennsRotationDetail);
             if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail !== 'undefined') {
                 antennaRotationDetails.id = antennsRotationDetail.id;
             }
@@ -481,7 +481,7 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
             }
         }
         antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId, undefined);
-        console.log("antenns Rotation Detail : ---------->>>1", antennsRotationDetail);
+        //console.log("antenns Rotation Detail : ---------->>>1", antennsRotationDetail);
         if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail !== 'undefined') {
             antennaRotationDetails.id = antennsRotationDetail.id;
             let antennsRotationLogDetail = {

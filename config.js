@@ -80,7 +80,7 @@ const config = {
 		'admin': {
 			all: true
 		}, 
-		'nokiaworking-antennarotationdetails' : {
+		'nokiaworking-antennarotationdetails' : { 
 			all: true
 		},
 		'nokiaworking-antennaRotationDetailsQS' : {

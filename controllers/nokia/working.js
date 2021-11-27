@@ -202,7 +202,7 @@ const getAntennaRotationDetails_byTowerID = async (towerAntennaId, res) => {
         where.push(util.constructWheresForSequelize('towerAntennaId', towerAntennaId));
         const resultData = await dal.getList({ model: db.antennaRotationDetails, where, order: [['createdAt', 'desc']], include: false, rowsToReturn: 1, pageIndex: 0, undefined });
         if (resultData) {
-           // console.log("results ---------1----------", resultData);
+            // console.log("results ---------1----------", resultData);
             const dataoindex = resultData && resultData[0];
             return dataoindex;
         }
@@ -250,52 +250,121 @@ const _FindAntennaRotationDetailsAlreadyExistOrNot = async (towerAntennaId) => {
         return 'success'
     }
 };
+// const saveAntennaRotationDetails_FromBody = async (req, res) => {
+//     try {
+//         const antennaRotationDetails = req.body;
+//         var antennaRotationLogsDetails = [];
+//         console.log("Antenna Rotation Details : ", antennaRotationDetails);
+//         if (req.user && req.user.id !== null)
+//             UserId = req.user.id; 
+//         const towerAntennaId = antennaRotationDetails && antennaRotationDetails.towerAntennaId ? antennaRotationDetails.towerAntennaId : undefined;
+//         const ChekAlreadyExist = await _FindAntennaRotationDetailsAlreadyExistOrNot(towerAntennaId);
+//         if (ChekAlreadyExist && ChekAlreadyExist !== "success") {
+//             let antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId);
+//             if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail.length > 0) {
+//                 antennaRotationDetails.id = antennsRotationDetail.antennaRotationDetailId;
+//                 let antennsRotationLogDetail = {
+//                     antennaRotationDetailId: antennsRotationDetail.antennaRotationDetailId,
+//                     towerAntennaId: antennsRotationDetail.towerAntennaId,
+//                     macOrAntennaCode: antennsRotationDetail.macOrAntennaCode,
+//                     azimuth: antennsRotationDetail.azimuth,
+//                     height: antennsRotationDetail.height,
+//                     direction: antennsRotationDetail.direction,
+//                     tiltX: antennsRotationDetail.tiltX,
+//                     tiltY: antennsRotationDetail.tiltY,
+//                     tiltZ: antennsRotationDetail.tiltZ,
+//                     azimuthPrev: antennsRotationDetail.azimuthPrev,
+//                     heightPrev: antennsRotationDetail.heightPrev,
+//                     directionPrev: antennsRotationDetail.directionPrev,
+//                     tiltXPrev: antennsRotationDetail.tiltXPrev,
+//                     tiltYPrev: antennsRotationDetail.tiltYPrev,
+//                     tiltZPrev: antennsRotationDetail.tiltZPrev,
+//                     isActive: true
+//                 }
+//                 antennaRotationLogsDetails.push(antennsRotationLogDetail);
+//                 const saveAntennaRotationDetails = await dal.saveData(db.antennaRotationLogDetails, antennaRotationLogsDetails, undefined, UserId);
+//             }
+//         } 
+//         if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
+//             const response = await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);
+//             responseHelper.success(res, codes.SUCCESS, "Success", 'Antenna Rotation Details Save Successfully', '-1', 1);
+
+//         }
+//         else {
+//             console.log("Backend Antenna Rotation Details Data else condition", req)
+//             responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
+//         }
+//     }
+//     catch (error) {
+//         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving Antenna Rotation Details');
+//     }
+// };
+
 const saveAntennaRotationDetails_FromBody = async (req, res) => {
     try {
         const antennaRotationDetails = req.body;
         var antennaRotationLogsDetails = [];
-        console.log("Antenna Rotation Details : ", antennaRotationDetails);
-        if (req.user && req.user.id !== null)
-            UserId = req.user.id;
+        console.log("Antenna Rotation Details : ------------>>", antennaRotationDetails);
+        if (req.body && req.body.userId !== null)
+            UserId = req.body.userId;
+        console.log("UserId : ------------>>", UserId);
         //const PKID = antennaRotationDetails && antennaRotationDetails.id ? antennaRotationDetails.id : undefined;
         const towerAntennaId = antennaRotationDetails && antennaRotationDetails.towerAntennaId ? antennaRotationDetails.towerAntennaId : undefined;
         const ChekAlreadyExist = await _FindAntennaRotationDetailsAlreadyExistOrNot(towerAntennaId);
-        if (ChekAlreadyExist && ChekAlreadyExist !== "success") {
-            let antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId);
-            if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail.length > 0) {
-                antennaRotationDetails.id = antennsRotationDetail.antennaRotationDetailId;
-                let antennsRotationLogDetail = {
-                    antennaRotationDetailId: antennsRotationDetail.antennaRotationDetailId,
-                    towerAntennaId: antennsRotationDetail.towerAntennaId,
-                    macOrAntennaCode: antennsRotationDetail.macOrAntennaCode,
-                    azimuth: antennsRotationDetail.azimuth,
-                    height: antennsRotationDetail.height,
-                    direction: antennsRotationDetail.direction,
-                    tiltX: antennsRotationDetail.tiltX,
-                    tiltY: antennsRotationDetail.tiltY,
-                    tiltZ: antennsRotationDetail.tiltZ,
-                    azimuthPrev: antennsRotationDetail.azimuthPrev,
-                    heightPrev: antennsRotationDetail.heightPrev,
-                    directionPrev: antennsRotationDetail.directionPrev,
-                    tiltXPrev: antennsRotationDetail.tiltXPrev,
-                    tiltYPrev: antennsRotationDetail.tiltYPrev,
-                    tiltZPrev: antennsRotationDetail.tiltZPrev,
-                    isActive: true
-                }
-                antennaRotationLogsDetails.push(antennsRotationLogDetail);
-                const saveAntennaRotationDetails = await dal.saveData(db.antennaRotationLogDetails, antennaRotationLogsDetails, undefined, UserId);
+        let antennsRotationDetail = undefined;
+        if (ChekAlreadyExist && ChekAlreadyExist !== "success") { 
+            antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId, undefined);
+            console.log("antenns Rotation Detail : ---------->>>0", antennsRotationDetail);
+            if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail !== 'undefined') {
+                antennaRotationDetails.id = antennsRotationDetail.id;
+            }
+            if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
+                const response = await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, undefined, UserId);
             }
         }
-        //-----let primaryKey = 'antennaRotationDetailId';
-        if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
-            const response = await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, res, UserId);
-            responseHelper.success(res, codes.SUCCESS, "Success", 'Antenna Rotation Details Save Successfully', '-1', 1);
+        else {           
+            if (util.missingRequiredFields('antennaRotationDetails', antennaRotationDetails, res) === '') {
+                const response = await dal.saveData(db.antennaRotationDetails, antennaRotationDetails, undefined, UserId);
+            }
+        }
+        antennsRotationDetail = await getAntennaRotationDetails_byTowerID(towerAntennaId, undefined);
+        console.log("antenns Rotation Detail : ---------->>>1", antennsRotationDetail);
+        if (antennsRotationDetail && antennsRotationDetail !== null && antennsRotationDetail !== 'undefined') {
+            antennaRotationDetails.id = antennsRotationDetail.id;
+            let antennsRotationLogDetail = {
+                antennaRotationDetailId: antennsRotationDetail.id,
+                towerAntennaId: antennsRotationDetail.towerAntennaId,
+                macOrAntennaCode: antennsRotationDetail.macOrAntennaCode,
+                azimuth: antennsRotationDetail.azimuth,
+                height: antennsRotationDetail.height,
+                direction: antennsRotationDetail.direction,
+                tiltX: antennsRotationDetail.tiltX,
+                tiltY: antennsRotationDetail.tiltY,
+                tiltZ: antennsRotationDetail.tiltZ,
+                azimuthPrev: antennsRotationDetail.azimuthPrev,
+                heightPrev: antennsRotationDetail.heightPrev,
+                directionPrev: antennsRotationDetail.directionPrev,
+                tiltXPrev: antennsRotationDetail.tiltXPrev,
+                tiltYPrev: antennsRotationDetail.tiltYPrev,
+                tiltZPrev: antennsRotationDetail.tiltZPrev,
+                isActive: true
+            }
+            const saveAntennaRotationLogDetails = await dal.saveData(db.antennaRotationDetailsLog, antennsRotationLogDetail, undefined, UserId);             
+            if (saveAntennaRotationLogDetails) {
+                
+                    responseHelper.success(res, codes.SUCCESS, "Success", 'Antenna Rotation Details Save Successfully', '-1', 1);
+ 
+            }
+            else {
+                responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
 
+            }
         }
-        else {
-            console.log("Backend Antenna Rotation Details Data else condition", req)
-            responseHelper.success(res, codes.ERROR, "FAIL", 'Antenna Rotation Details Not Saved', '-1', 0);
-        }
+  
+
+        //responseHelper.success(JSON.stringify(antennaRotationDetails), codes.SUCCESS, "Success",'Antenna Rotation Details Save Successfully','-1',1);
+        //-----let primaryKey = 'antennaRotationDetailId';
+
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving Antenna Rotation Details');
@@ -387,10 +456,10 @@ const saveAntennaRotationDetails_FromQuery = async (req, res) => {
 const getAntennaRotataionDetailLogs = async (req, res) => {
     try {
         console.log("getAntennaRotataionDetailLogs backend :", req.query)
-        db.sequelize.query('call asp_nk_antenna_rotation_log_get_antenna_rotation_logs_details(:p_antenna_rotation_details_id, :p_antenna_rotation_details_id)',
+        db.sequelize.query('call asp_nk_antenna_rotation_log_get_antenna_rotation_logs_details(:p_antenna_rotation_details_id)',
             {
                 replacements: {
-                    p_antenna_rotation_details_id: req.query.antennaRotationDetailsId ? req.query.antennaRotationDetailsId : '',
+                    p_antenna_rotation_details_id: req.query.antennaRotationDetailId ? req.query.antennaRotationDetailId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'Tower antenna rotation detail log get successfully', '-1', results.length);
@@ -436,6 +505,7 @@ module.exports.deleteMediaDetails = deleteMediaDetails;
 module.exports.getMediaDetails = getMediaDetails;
 
 module.exports.getAntennaRotataionDetails = getAntennaRotataionDetails;
+module.exports.getAntennaRotataionDetailLogs = getAntennaRotataionDetailLogs;
 
 module.exports.getDeviceLocationDetails = getDeviceLocationDetails;
 

@@ -82,6 +82,9 @@ const config = {
 		}, 
 		'nokiaworking-antennarotationdetails' : {
 			all: true
+		},
+		'nokiaworking-antennaRotationDetailsQS' : {
+			all: true
 		}
 		// 'chimpmail-update-mailchimp': {
 		// 	all: true

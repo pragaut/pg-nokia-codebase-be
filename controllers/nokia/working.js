@@ -373,6 +373,7 @@ const saveAntennaRotationDetails_FromBody = async (req, res) => {
 };
 const saveAntennaRotationDetails_FromQuery = async (req, res) => {
     try {
+        console.log("post req query...");
         const antennaRotationDetails = req.query;
         var antennaRotationLogsDetails = [];
         //console.log("Antenna Rotation Details : ", antennaRotationDetails);

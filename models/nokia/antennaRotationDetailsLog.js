@@ -41,6 +41,18 @@ module.exports = function (sequelize, DataTypes) {
 			type : DataTypes.STRING,
 			field : 'tilt_z'
         },
+		magX: {
+			type : DataTypes.STRING,
+			field : 'mag_x'
+        },
+		magY: {
+			type : DataTypes.STRING,
+			field : 'mag_y'
+        },
+		magZ: {
+			type : DataTypes.STRING,
+			field : 'mag_z'
+        },
 		azimuthPrev: {
 			type : DataTypes.STRING,
 			field : 'azimuth_prev'

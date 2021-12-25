@@ -14,7 +14,7 @@ const { json } = require('express');
 const saveTMCDeviceBetteryStatusDetails = (req, res) => {
     try {
         let deviceBatteryDetails = req.body;
-        if (util.missingRequiredFields('', deviceBatteryDetails, res) === '') {
+        if (util.missingRequiredFields('deviceBatteryDetails', deviceBatteryDetails, res) === '') {
             const result = await dal.saveData(db.deviceBatteryDetails, deviceBatteryDetails, undefined.req.user.id);
             if (result) {
                 responseHelper.success(res, codes.success, result, 'Device battery details saved successfully !!', result.id);
@@ -32,7 +32,7 @@ const saveTMCDeviceBetteryStatusDetails = (req, res) => {
 const saveTMCDeviceBetteryStatusDetailsP = (req, res) => {
     try {
         let deviceBatteryDetails = req.body;
-        if (util.missingRequiredFields('', deviceBatteryDetails, res) === '') {
+        if (util.missingRequiredFields('deviceBatteryDetails', deviceBatteryDetails, res) === '') {
             //const result = await dal.saveData(db.deviceBatteryDetails, deviceBatteryDetails, undefined.req.user.id);
 
             let result = undefined;
@@ -66,6 +66,45 @@ const saveTMCDeviceBetteryStatusDetailsP = (req, res) => {
     }
 }
 
+const saveTMCDeviceLocationDetails = (req, res) => {
+    try {
+        let deviceLocationDetails = req.body;
+        if (util.missingRequiredFields('deviceLocationDetails', deviceLocationDetails, res) === '') {
+            const result = await dal.saveData(db.deviceLocationDetails, deviceLocationDetails, undefined.req.user.id);
+            if (result) {
+                responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', result.id);
+            }
+            else {
+                responseHelper.error(res, result, codes.ERROR, 'Error in Saving device location details !!');
+            }
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device location details !!');
+    }
+}
+
+const saveTMCDeviceNetworkConnectivityStatusDetails = (req, res) => {
+    try {
+        let deviceNetworkConnectivityStatusDetails = req.body;
+        if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {
+            const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined.req.user.id);
+            if (result) {
+                responseHelper.success(res, codes.success, result, 'Device network connctivity details saved successfully !!', result.id);
+            }
+            else {
+                responseHelper.error(res, result, codes.ERROR, 'Error in Saving device network connctivity details !!');
+            }
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device network connctivity details !!');
+    }
+}
 
 module.exports.saveTMCDeviceBetteryStatusDetails = saveTMCDeviceBetteryStatusDetails;
 module.exports.saveTMCDeviceBetteryStatusDetailsP = saveTMCDeviceBetteryStatusDetailsP;
+
+module.exports.saveTMCDeviceLocationDetails = saveTMCDeviceLocationDetails;
+
+module.exports.saveTMCDeviceNetworkConnectivityStatusDetails = saveTMCDeviceNetworkConnectivityStatusDetails;

@@ -5,7 +5,7 @@ const util = require('../../util');
 const working = require('../../controllers/nokia/working');
 const workingTMC = require('../../controllers/nokia/tmc.working');
 
-//#-------------region AISU----------------//
+//#-------------region AISU start----------------//
 
 //#region Antenna Rotataion Details
 router.get('/antennaRotationDetails', (req, res) => working.getAntennaRotataionDetails(req, res));
@@ -39,7 +39,7 @@ router.post('/mediaDetails/multiplefiles', (req, res) => working.saveMultipleMed
 //#endregion ----------region AISU end--------------------///
 
 
-//#-------------region TMC start----------------//
+//#---------------------region TMC start----------------//
 
 //#region TMC Device Battery Details
 
@@ -53,6 +53,19 @@ router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBett
 
 //#endregion
 
+//#region TMC Device Location Details
+
+router.post('/deviceLocationDetails', (req, res) => workingTMC.saveTMCDeviceLocationDetails(req, res));
+router.post('/deviceLocationDetails', (req, res) => workingTMC.saveTMCDeviceLocationDetails(req, res));
+
+//#endregion
+
+//#region TMC Device Network Connectivity Status Details
+
+router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.saveTMCDeviceNetworkConnectivityStatusDetails(req, res));
+router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.saveTMCDeviceNetworkConnectivityStatusDetails(req, res));
+
+//#endregion
 
 //#endregion ----------region TMC end--------------------///
 

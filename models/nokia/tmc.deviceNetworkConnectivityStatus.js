@@ -30,7 +30,7 @@ module.exports = function (sequelize, DataTypes) {
             field: 'internet_connectivity_status'
         },
         isActive: {
-            type: DataTypes.BOOLEN,
+            type: DataTypes.BOOLEAN,
             field: 'is_active'
         },
         createdBy: {

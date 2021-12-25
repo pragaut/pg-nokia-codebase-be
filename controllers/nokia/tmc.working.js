@@ -84,7 +84,7 @@ const saveTMCDeviceLocationDetails = async (req, res) => {
     }
 }
 
-const saveTMCDeviceNetworkConnectivityStatusDetails = async(req, res) => {
+const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     try {
         let deviceNetworkConnectivityStatusDetails = req.body;
         if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {

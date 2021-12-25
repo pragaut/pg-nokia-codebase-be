@@ -26,7 +26,7 @@ module.exports = function (sequelize, DataTypes) {
             field: 'child3_device_battery'
         },
         isActive: {
-            type: DataTypes.BOOLEN,
+            type: DataTypes.BOOLEAN,
             field: 'is_active'
         },
         createdBy: {

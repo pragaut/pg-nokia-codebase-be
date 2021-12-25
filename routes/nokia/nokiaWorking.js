@@ -3,6 +3,9 @@ var express = require('express');
 var router = express.Router();
 const util = require('../../util');
 const working = require('../../controllers/nokia/working');
+const workingTMC = require('../../controllers/nokia/tmc.working');
+
+//#-------------region AISU start----------------//
 
 //#region Antenna Rotataion Details
 router.get('/antennaRotationDetails', (req, res) => working.getAntennaRotataionDetails(req, res));
@@ -14,7 +17,7 @@ router.post('/antennaRotationDetailsQS', (req, res) => working.saveAntennaRotati
 
 //#region Antenna Rotataion Details
 
-router.get('/antennaRotationDetailLogs', (req, res) => working.getAntennaRotataionDetailLogs(req, res)); 
+router.get('/antennaRotationDetailLogs', (req, res) => working.getAntennaRotataionDetailLogs(req, res));
 
 //#endregion
 
@@ -32,5 +35,39 @@ router.delete('/mediaDetails', (req, res) => working.deleteMediaDetails(req, res
 router.post('/mediaDetails/multiplefiles', (req, res) => working.saveMultipleMediaDetails(req, res));
 
 //#endregion
+
+//#endregion ----------region AISU end--------------------///
+
+
+//#---------------------region TMC start----------------//
+
+//#region TMC Device Battery Details
+
+router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
+router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
+router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetailsP(req, res));
+router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetailsP(req, res));
+
+//router.get('/deviceBatteryDetails', (req, res) => workingTMC.getAntennaRotataionDetails(req, res));
+//router.put('/deviceBatteryDetails', (req, res) => workingTMC.saveAntennaRotationDetails(req, res));
+
+//#endregion
+
+//#region TMC Device Location Details
+
+router.post('/deviceLocationDetails', (req, res) => workingTMC.saveTMCDeviceLocationDetails(req, res));
+router.post('/deviceLocationDetails', (req, res) => workingTMC.saveTMCDeviceLocationDetails(req, res));
+
+//#endregion
+
+//#region TMC Device Network Connectivity Status Details
+
+router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.saveTMCDeviceNetworkConnectivityStatusDetails(req, res));
+router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.saveTMCDeviceNetworkConnectivityStatusDetails(req, res));
+
+//#endregion
+
+//#endregion ----------region TMC end--------------------///
+
 
 module.exports = router;

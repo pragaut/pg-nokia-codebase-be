@@ -1188,8 +1188,8 @@ const saveData = async (model, body, res, callingUserId, transaction, counter = 
         }
     }
     catch (error) {
-        console.log('eeeeee: error ------------- ', error);
-        console.log('eeeeee: ', error.name, error.fields);
+        //console.log('eeeeee: error ------------- ', error);
+        //console.log('eeeeee: ', error.name, error.fields);
 
         if (error.name === 'SequelizeUniqueConstraintError' && newRecord) {
             // unique constraint error.  

@@ -5,13 +5,12 @@ const util = require('../../util');
 const responseHelper = require('../../util/response.helper');
 const config = require('../../config').config;
 const encryptionHelper = require('../../util/encryption.helper');
-const codes = require('../../util/codes').codes;
-const constants = require('../../util/constant');
+const codes = require('../../util/codes').codes; 
 const emailService = require('../../util/email');
 const { json } = require('express');
 
 
-const saveTMCDeviceBetteryStatusDetails = (req, res) => {
+const saveTMCDeviceBetteryStatusDetails =async (req, res) => {
     try {
         let deviceBatteryDetails = req.body;
         if (util.missingRequiredFields('deviceBatteryDetails', deviceBatteryDetails, res) === '') {
@@ -29,7 +28,7 @@ const saveTMCDeviceBetteryStatusDetails = (req, res) => {
     }
 }
 
-const saveTMCDeviceBetteryStatusDetailsP = (req, res) => {
+const saveTMCDeviceBetteryStatusDetailsP = async (req, res) => {
     try {
         let deviceBatteryDetails = req.body;
         if (util.missingRequiredFields('deviceBatteryDetails', deviceBatteryDetails, res) === '') {
@@ -66,7 +65,7 @@ const saveTMCDeviceBetteryStatusDetailsP = (req, res) => {
     }
 }
 
-const saveTMCDeviceLocationDetails = (req, res) => {
+const saveTMCDeviceLocationDetails =async (req, res) => {
     try {
         let deviceLocationDetails = req.body;
         if (util.missingRequiredFields('deviceLocationDetails', deviceLocationDetails, res) === '') {
@@ -84,7 +83,7 @@ const saveTMCDeviceLocationDetails = (req, res) => {
     }
 }
 
-const saveTMCDeviceNetworkConnectivityStatusDetails = (req, res) => {
+const saveTMCDeviceNetworkConnectivityStatusDetails =async (req, res) => {
     try {
         let deviceNetworkConnectivityStatusDetails = req.body;
         if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {

@@ -70,6 +70,14 @@ router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.
 
 //#endregion
 
+//#region TMC Tower Monitoring Details
+
+router.get('/deviceBatteryStatus', (req, res) => workingTMC.getDeviceBatteryStatus(req, res));
+router.get('/towerMonitoringDetails', (req, res) => workingTMC.getTowerMonitoringDetails(req, res));
+router.get('/deviceStatusDetails', (req, res) => workingTMC.getDeviceStatusDetails(req, res));
+router.get('/networkConnectivityStatuDetails', (req, res) => workingTMC.getNetworkConnectivityStatuDetails(req, res));
+router.get('/towerMonitoringSubDetails', (req, res) => workingTMC.getTowerMonitoringSubDetails(req, res));
+ 
 //#region  TMC Device Mapping Details
 router.get('/deviceMappingDetails', (req, res) => workingTMC.getTMCDeviceMappingDetails(req, res));
 //#endregion

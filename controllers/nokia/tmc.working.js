@@ -13,6 +13,7 @@ const { json } = require('express');
 const saveTMCDetailsP = async (req, res) => {
     try {
         let deviceBatteryDetails = req.body;
+        console.log("deviceBatteryDetails : ", deviceBatteryDetails);
         if (util.missingRequiredFields('deviceBatteryDetails', deviceBatteryDetails, res) === '') {
             //const result = await dal.saveData(db.deviceBatteryDetails, deviceBatteryDetails, undefined.req.user.id);
 
@@ -31,7 +32,7 @@ const saveTMCDetailsP = async (req, res) => {
                 }
             }).then(results => {
                 console.log("saveTMCDetailsP results : ", results);
-                result = results;                
+                result = results;
             }).catch(error => {
                 console.log("saveTMCDetailsP error : ", error);
                 result = error;

@@ -139,10 +139,82 @@ const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     }
 }
 
-module.exports.saveTMCDetailsP = saveTMCDetailsP;
+//#region  Device mapping details
+const getTMCDeviceMappingDetails = async (req, res) => {
+    try { 
+        db.sequelize.query('call asp_nk_device_mapping_get_device_mapping_details(:p_device_registration_detail_id, :p_tower_id)',
+            {
+                replacements: {
+                    p_device_registration_detail_id: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
+                    p_tower_id: req.query.towerId ? req.query.towerId : '', 
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'device mapping details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting device mapping details');
+
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'device mapping details');
+    }
+}; 
+//#endregion
+//#region tower Notification Details
+
+const getTMCTowerNotificationDetails = async(req,res) =>{
+    try { 
+        db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_sub_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
+            {
+                replacements: {
+                    p_tower_monitoring_sub_detail_id: req.query.towerMonitoringSubDetailId ? req.query.towerMonitoringSubDetailId : '',
+                    p_alarm_type_id: req.query.alarmTypeId ? req.query.alarmTypeId : '', 
+                    p_device_registration_detail_id: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '', 
+                    p_is_Closed: req.query.isClosed ? req.query.isClosed : null
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower notification details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower notification details');
+
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower notification details');
+    }
+};
+
+const updateTMCTowerNotificationDetails = async (req, res) => {
+    try {
+        const TowerNotificationDetails = req.body;
+        console.log("Tower Notification Details : ", TowerNotificationDetails);
+        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;   
+  
+        if (req.user && req.user.id !== null)
+            UserId = req.user.id;
+        //-----let primaryKey = 'org_modules_id';
+        if (util.missingRequiredFields('TowerNotificationDetails', TowerNotificationDetails, res) === '') {
+            //----- await dal.saveData(db.moduleMaster, moduleMaster, res, UserId, undefined, undefined, undefined, primaryKey);
+            await dal.saveData(db.towerMonitoringNotificationDetails, TowerNotificationDetails, res, UserId);
+        }
+        else {
+            console.log("Backend Module master Data else condition", req)
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'saving Tower Notification Details Details');
+    }
+};
+
+//#endregion
+
 module.exports.saveTMCDeviceBetteryStatusDetails = saveTMCDeviceBetteryStatusDetails;
 module.exports.saveTMCDeviceBetteryStatusDetailsP = saveTMCDeviceBetteryStatusDetailsP;
 
 module.exports.saveTMCDeviceLocationDetails = saveTMCDeviceLocationDetails;
 
 module.exports.saveTMCDeviceNetworkConnectivityStatusDetails = saveTMCDeviceNetworkConnectivityStatusDetails;
+
+module.exports.getTMCDeviceMappingDetails = getTMCDeviceMappingDetails;
+module.exports.getTMCTowerNotificationDetails = getTMCTowerNotificationDetails;
+module.exports.updateTMCTowerNotificationDetails = updateTMCTowerNotificationDetails;

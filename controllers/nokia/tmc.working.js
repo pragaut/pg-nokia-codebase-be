@@ -30,8 +30,10 @@ const saveTMCDetailsP = async (req, res) => {
                     p_created_by: req.useId ? req.useId : '',
                 }
             }).then(results => {
-                result = results;
+                console.log("saveTMCDetailsP results : ", results);
+                result = results;                
             }).catch(error => {
+                console.log("saveTMCDetailsP error : ", error);
                 result = error;
             })
             if (result) {
@@ -43,6 +45,7 @@ const saveTMCDetailsP = async (req, res) => {
         }
     }
     catch (error) {
+        console.log("saveTMCDetailsP error 2 : ", error);
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device battery details !!');
     }
 }

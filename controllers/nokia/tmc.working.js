@@ -23,12 +23,12 @@ const saveTMCDetailsP = async (req, res) => {
             await db.sequelize.query('call asp_nk_save_device_battery_status_details(:p_device_battery_status_detail_id,:p_mac_address,:p_main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:p_created_by)', {
                 replacements: {
                     p_device_battery_status_detail_id: id,
-                    p_mac_address: req.macAddress ? req.macAddress : '',
-                    p_main_device_battery: req.mainDeviceBattery ? req.mainDeviceBattery : '',
-                    p_child1_device_battery: req.child1DeviceBattery ? req.child1DeviceBattery : '',
-                    p_child2_device_battery: req.child2DeviceBattery ? req.child2DeviceBattery : '',
-                    p_child3_device_battery: req.child3DeviceBattery ? req.child3DeviceBattery : '',
-                    p_created_by: req.useId ? req.useId : '',
+                    p_mac_address: deviceBatteryDetails.macAddress ? deviceBatteryDetails.macAddress : '',
+                    p_main_device_battery: deviceBatteryDetails.mainDeviceBattery ? deviceBatteryDetails.mainDeviceBattery : '',
+                    p_child1_device_battery: deviceBatteryDetails.child1DeviceBattery ? deviceBatteryDetails.child1DeviceBattery : '',
+                    p_child2_device_battery: deviceBatteryDetails.child2DeviceBattery ? deviceBatteryDetails.child2DeviceBattery : '',
+                    p_child3_device_battery: deviceBatteryDetails.child3DeviceBattery ? deviceBatteryDetails.child3DeviceBattery : '',
+                    p_created_by: deviceBatteryDetails.useId ? deviceBatteryDetails.useId : '',
                 }
             }).then(results => {
                 console.log("saveTMCDetailsP results : ", results);
@@ -198,15 +198,15 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
         let StatusUpdatedOn = new Date();
         console.log("StatusUpdatedOn : >>>>>", StatusUpdatedOn);
         let towerNotificationDetails = {
-           id : TowerNotificationDetails.id,
-           remarks : TowerNotificationDetails.remarks,
-           isClosed : true,
-           statusUpdatedBy : UserId,
-           statusUpdatedOn : StatusUpdatedOn
+            id: TowerNotificationDetails.id,
+            remarks: TowerNotificationDetails.remarks,
+            isClosed: true,
+            statusUpdatedBy: UserId,
+            statusUpdatedOn: StatusUpdatedOn
         }
         console.log("Tower Notification Details : >>>>>>>> ", towerNotificationDetails);
-        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;   
-  
+        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;
+
         //-----let primaryKey = 'org_modules_id';
         if (util.missingRequiredFields('TowerNotificationDetails', TowerNotificationDetails, res) === '') {
             //----- await dal.saveData(db.moduleMaster, moduleMaster, res, UserId, undefined, undefined, undefined, primaryKey);

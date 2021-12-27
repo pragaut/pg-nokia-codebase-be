@@ -203,9 +203,7 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
            isClosed : true,
            statusUpdatedBy : UserId,
            statusUpdatedOn : StatusUpdatedOn
-        }
-        console.log("Tower Notification Details : >>>>>>>> ", towerNotificationDetails);
-        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;   
+        }   
   
         //-----let primaryKey = 'org_modules_id';
         if (util.missingRequiredFields('TowerNotificationDetails', TowerNotificationDetails, res) === '') {

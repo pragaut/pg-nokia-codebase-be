@@ -43,6 +43,9 @@ router.post('/mediaDetails/multiplefiles', (req, res) => working.saveMultipleMed
 
 //#region TMC Device Battery Details
 
+router.post('/tmcDetails', (req, res) => workingTMC.saveTMCDetailsP(req, res));
+router.post('/tmcDetails', (req, res) => workingTMC.saveTMCDetailsP(req, res));
+
 router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
 router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
 router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetailsP(req, res));
@@ -75,6 +78,12 @@ router.get('/deviceStatusDetails', (req, res) => workingTMC.getDeviceStatusDetai
 router.get('/networkConnectivityStatuDetails', (req, res) => workingTMC.getNetworkConnectivityStatuDetails(req, res));
 router.get('/towerMonitoringSubDetails', (req, res) => workingTMC.getTowerMonitoringSubDetails(req, res));
  
+//#region  TMC Device Mapping Details
+router.get('/deviceMappingDetails', (req, res) => workingTMC.getTMCDeviceMappingDetails(req, res));
+//#endregion
+//#region  Tower Notification Details
+router.get('/towerNotificationDetails', (req, res) => workingTMC.getTMCTowerNotificationDetails(req, res));
+router.put('/towerNotificationDetails', (req, res) => workingTMC.updateTMCTowerNotificationDetails(req, res));
 //#endregion
 
 //#endregion ----------region TMC end--------------------///

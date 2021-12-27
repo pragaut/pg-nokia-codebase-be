@@ -17,7 +17,7 @@ const saveTMCDetailsP = async (req, res) => {
             //const result = await dal.saveData(db.deviceBatteryDetails, deviceBatteryDetails, undefined.req.user.id);
 
             let result = undefined;
-            let id = dal.uuid(db.deviceBatteryDetails.name);
+            let id = dal.uuid(db.deviceBatteryStatusDetails.name);
 
             db.sequelize.query('call asp_nk_save_device_battery_status_details(:p_device_battery_status_detail_id,:p_mac_address,:main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:created_by)', {
                 replacements: {
@@ -51,7 +51,7 @@ const saveTMCDeviceBetteryStatusDetails = async (req, res) => {
     try {
         let deviceBatteryDetails = req.body;
         if (util.missingRequiredFields('deviceBatteryDetails', deviceBatteryDetails, res) === '') {
-            const result = await dal.saveData(db.deviceBatteryDetails, deviceBatteryDetails, undefined.req.user.id);
+            const result = await dal.saveData(db.deviceBatteryStatusDetails, deviceBatteryDetails, undefined.req.user.id);
             if (result) {
                 responseHelper.success(res, codes.success, result, 'Device battery details saved successfully !!', result.id);
             }
@@ -72,7 +72,7 @@ const saveTMCDeviceBetteryStatusDetailsP = async (req, res) => {
             //const result = await dal.saveData(db.deviceBatteryDetails, deviceBatteryDetails, undefined.req.user.id);
 
             let result = undefined;
-            let id = dal.uuid(db.deviceBatteryDetails.name);
+            let id = dal.uuid(db.deviceBatteryStatusDetails.name);
 
             db.sequelize.query('call asp_nk_save_device_battery_status_details(:p_device_battery_status_detail_id,:p_mac_address,:main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:created_by)', {
                 replacements: {

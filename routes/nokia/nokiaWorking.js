@@ -43,6 +43,9 @@ router.post('/mediaDetails/multiplefiles', (req, res) => working.saveMultipleMed
 
 //#region TMC Device Battery Details
 
+router.post('/tmcDetails', (req, res) => workingTMC.saveTMCDetailsP(req, res));
+router.post('/tmcDetails', (req, res) => workingTMC.saveTMCDetailsP(req, res));
+
 router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
 router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
 router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetailsP(req, res));

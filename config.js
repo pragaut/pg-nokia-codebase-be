@@ -85,6 +85,9 @@ const config = {
 		},
 		'nokiaworking-antennaRotationDetailsQS' : {
 			all: true
+		},
+		'nokiaworking-tmcdetails' : {
+			all: true
 		}
 		// 'chimpmail-update-mailchimp': {
 		// 	all: true

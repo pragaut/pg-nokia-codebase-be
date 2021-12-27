@@ -126,7 +126,7 @@ const getTMCDeviceMappingDetails = async (req, res) => {
 //#region tower Notification Details
 
 const getTMCTowerNotificationDetails = async(req,res) =>{
-    try { 
+    try {  
         db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_sub_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
             {
                 replacements: {
@@ -150,15 +150,25 @@ const getTMCTowerNotificationDetails = async(req,res) =>{
 const updateTMCTowerNotificationDetails = async (req, res) => {
     try {
         const TowerNotificationDetails = req.body;
-        console.log("Tower Notification Details : ", TowerNotificationDetails);
-        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;   
-  
+
         if (req.user && req.user.id !== null)
             UserId = req.user.id;
+        let StatusUpdatedOn = new Date();
+        console.log("StatusUpdatedOn : >>>>>", StatusUpdatedOn);
+        let towerNotificationDetails = {
+           id : TowerNotificationDetails.id,
+           remarks : TowerNotificationDetails.remarks,
+           isClosed : true,
+           statusUpdatedBy : UserId,
+           statusUpdatedOn : StatusUpdatedOn
+        }
+        console.log("Tower Notification Details : >>>>>>>> ", towerNotificationDetails);
+        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;   
+  
         //-----let primaryKey = 'org_modules_id';
         if (util.missingRequiredFields('TowerNotificationDetails', TowerNotificationDetails, res) === '') {
             //----- await dal.saveData(db.moduleMaster, moduleMaster, res, UserId, undefined, undefined, undefined, primaryKey);
-            await dal.saveData(db.towerMonitoringNotificationDetails, TowerNotificationDetails, res, UserId);
+            await dal.saveData(db.towerMonitoringNotificationDetails, towerNotificationDetails, res, UserId);
         }
         else {
             console.log("Backend Module master Data else condition", req)

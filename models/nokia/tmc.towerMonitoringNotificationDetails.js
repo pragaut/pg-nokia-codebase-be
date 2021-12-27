@@ -50,7 +50,7 @@ module.exports = function (sequelize, DataTypes) {
             field: 'remarks'
         },
         statusUpdatedOn: {
-            type: DataTypes.STRING,
+            type: DataTypes.DATE,
             field: 'status_updated_on'
         },
         isActive: {

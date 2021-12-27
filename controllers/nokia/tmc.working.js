@@ -195,10 +195,22 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
         if (req.user && req.user.id !== null)
             UserId = req.user.id;
+        let StatusUpdatedOn = new Date();
+        console.log("StatusUpdatedOn : >>>>>", StatusUpdatedOn);
+        let towerNotificationDetails = {
+           id : TowerNotificationDetails.id,
+           remarks : TowerNotificationDetails.remarks,
+           isClosed : true,
+           statusUpdatedBy : UserId,
+           statusUpdatedOn : StatusUpdatedOn
+        }
+        console.log("Tower Notification Details : >>>>>>>> ", towerNotificationDetails);
+        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;   
+  
         //-----let primaryKey = 'org_modules_id';
         if (util.missingRequiredFields('TowerNotificationDetails', TowerNotificationDetails, res) === '') {
             //----- await dal.saveData(db.moduleMaster, moduleMaster, res, UserId, undefined, undefined, undefined, primaryKey);
-            await dal.saveData(db.towerMonitoringNotificationDetails, TowerNotificationDetails, res, UserId);
+            await dal.saveData(db.towerMonitoringNotificationDetails, towerNotificationDetails, res, UserId);
         }
         else {
             console.log("Backend Module master Data else condition", req)

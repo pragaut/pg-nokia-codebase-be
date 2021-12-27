@@ -67,6 +67,14 @@ router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.
 
 //#endregion
 
+//#region  TMC Device Mapping Details
+router.get('/deviceMappingDetails', (req, res) => workingTMC.getTMCDeviceMappingDetails(req, res));
+//#endregion
+//#region  Tower Notification Details
+router.get('/towerNotificationDetails', (req, res) => workingTMC.getTMCTowerNotificationDetails(req, res));
+router.put('/towerNotificationDetails', (req, res) => workingTMC.updateTMCTowerNotificationDetails(req, res));
+//#endregion
+
 //#endregion ----------region TMC end--------------------///
 
 

@@ -19,7 +19,7 @@ const saveTMCDetailsP = async (req, res) => {
             let result = undefined;
             let id = dal.uuid(db.deviceBatteryStatusDetails.name);
 
-            db.sequelize.query('call asp_nk_save_device_battery_status_details(:p_device_battery_status_detail_id,:p_mac_address,:main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:created_by)', {
+            db.sequelize.query('call asp_nk_save_device_battery_status_details(:p_device_battery_status_detail_id,:p_mac_address,:p_main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:p_created_by)', {
                 replacements: {
                     p_device_battery_status_detail_id: id,
                     p_mac_address: req.macAddress ? req.macAddress : '',

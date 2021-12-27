@@ -170,7 +170,7 @@ const getTMCTowerNotificationDetails = async (req, res) => {
         db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_sub_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
             {
                 replacements: {
-                    p_tower_monitoring_sub_detail_id: req.query.towerMonitoringSubDetailId ? req.query.towerMonitoringSubDetailId : '',
+                    p_tower_monitoring_detail_id: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
                     p_alarm_type_id: req.query.alarmTypeId ? req.query.alarmTypeId : '',
                     p_device_registration_detail_id: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
                     p_is_Closed: req.query.isClosed ? req.query.isClosed : null
@@ -198,15 +198,13 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
         let StatusUpdatedOn = new Date();
         console.log("StatusUpdatedOn : >>>>>", StatusUpdatedOn);
         let towerNotificationDetails = {
-            id: TowerNotificationDetails.id,
-            remarks: TowerNotificationDetails.remarks,
-            isClosed: true,
-            statusUpdatedBy: UserId,
-            statusUpdatedOn: StatusUpdatedOn
-        }
-        console.log("Tower Notification Details : >>>>>>>> ", towerNotificationDetails);
-        const PKID = TowerNotificationDetails && TowerNotificationDetails.id ? TowerNotificationDetails.id : undefined;
-
+           id : TowerNotificationDetails.id,
+           remarks : TowerNotificationDetails.remarks,
+           isClosed : true,
+           statusUpdatedBy : UserId,
+           statusUpdatedOn : StatusUpdatedOn
+        }   
+  
         //-----let primaryKey = 'org_modules_id';
         if (util.missingRequiredFields('TowerNotificationDetails', TowerNotificationDetails, res) === '') {
             //----- await dal.saveData(db.moduleMaster, moduleMaster, res, UserId, undefined, undefined, undefined, primaryKey);

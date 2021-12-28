@@ -167,7 +167,7 @@ const getTMCDeviceMappingDetails = async (req, res) => {
 
 const getTMCTowerNotificationDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_sub_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
+        db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
             {
                 replacements: {
                     p_tower_monitoring_detail_id: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',

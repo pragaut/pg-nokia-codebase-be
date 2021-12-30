@@ -9,6 +9,10 @@ module.exports = function (sequelize, DataTypes) {
 			type : DataTypes.STRING,
 			field : 'org_details_id'
 		},
+		grpModulesId: {
+			type : DataTypes.STRING,
+			field : 'grp_modules_id'
+		},
 		macAddress: {
 			type : DataTypes.STRING,
 			field : 'mac_address'

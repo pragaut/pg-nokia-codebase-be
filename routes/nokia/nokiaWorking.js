@@ -77,13 +77,19 @@ router.get('/towerMonitoringDetails', (req, res) => workingTMC.getTowerMonitorin
 router.get('/deviceStatusDetails', (req, res) => workingTMC.getDeviceStatusDetails(req, res));
 router.get('/networkConnectivityStatuDetails', (req, res) => workingTMC.getNetworkConnectivityStatuDetails(req, res));
 router.get('/towerMonitoringSubDetails', (req, res) => workingTMC.getTowerMonitoringSubDetails(req, res));
- 
+router.get('/deviceBatteryStatusLog', (req, res) => workingTMC.getDeviceBatteryStatusLog(req, res));
+
 //#region  TMC Device Mapping Details
 router.get('/deviceMappingDetails', (req, res) => workingTMC.getTMCDeviceMappingDetails(req, res));
 //#endregion
+
 //#region  Tower Notification Details
 router.get('/towerNotificationDetails', (req, res) => workingTMC.getTMCTowerNotificationDetails(req, res));
 router.put('/towerNotificationDetails', (req, res) => workingTMC.updateTMCTowerNotificationDetails(req, res));
+//#endregion
+
+//#region Tower Active Status Details
+router.get('/towerActiveStatusDetails', (req, res) => workingTMC.getTMCTowerActiveStatusDetails(req, res));
 //#endregion
 
 //#endregion ----------region TMC end--------------------///

@@ -176,7 +176,7 @@ const getTMCDeviceMappingDetails = async (req, res) => {
 
 const getTMCTowerNotificationDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_sub_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
+        db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
             {
                 replacements: {
                     p_tower_monitoring_detail_id: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
@@ -188,14 +188,12 @@ const getTMCTowerNotificationDetails = async (req, res) => {
                 responseHelper.success(res, 200, results, 'tower notification details get successfully', '-1', results.length);
             }).catch(err => {
                 responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower notification details');
-
             });
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower notification details');
     }
 };
-
 const updateTMCTowerNotificationDetails = async (req, res) => {
     try {
         const TowerNotificationDetails = req.body;
@@ -204,8 +202,7 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
         if (req.user && req.user.id !== null)
             UserId = req.user.id;
-        let StatusUpdatedOn = new Date();
-        console.log("StatusUpdatedOn : >>>>>", StatusUpdatedOn);
+        let StatusUpdatedOn = new Date(); 
         let towerNotificationDetails = {
             id: TowerNotificationDetails.id,
             remarks: TowerNotificationDetails.remarks,
@@ -230,6 +227,29 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
 //#endregion
 
+//#region Get Tower Active Status Details
+
+const getTMCTowerActiveStatusDetails = async(req, res) => {
+    console.log("getTMCTowerActiveStatusDetails : >>>>","AA Gaya");
+    try {
+        db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_tower_id)',
+            {
+                replacements: {
+                    p_tower_id: req.query.towerId ? req.query.towerId : ''
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower active status get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower active status details');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower active status details');
+    }
+};
+
+//#endregion
+
 //#region  Tower Monitoring Details 
 const getDeviceBatteryStatus = async (req, res) => {
     try {
@@ -243,11 +263,29 @@ const getDeviceBatteryStatus = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'device battery status details');
     }
 };
+const getDeviceBatteryStatusLog = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_device_battery_get_device_battery_status_log_details(:p_TowerMonitoringDetailId, :p_DeviceRegistrationDetailId,:p_MacAddress)',
+            {
+                replacements: {
+                    p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
+                    p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
+                    p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower monitoring details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower monitoring details');
 
-
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower monitoring details');
+    }
+};
 const getTowerMonitoringDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired)',
+        db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_FromDate,:p_ToDate)',
             {
                 replacements: {
                     p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
@@ -256,7 +294,9 @@ const getTowerMonitoringDetails = async (req, res) => {
                     p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
                     p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
                     p_UniqueId: req.query.uniqueId ? req.query.uniqueId : '',
-                    p_IsOnlyTodayDataRequired: req.query.isOnlyTodayDataRequired ? req.query.isOnlyTodayDataRequired : '0'
+                    p_IsOnlyTodayDataRequired: req.query.isOnlyTodayDataRequired ? req.query.isOnlyTodayDataRequired : '0',
+                    p_FromDate: req.query.fromDate && req.query.fromDate !== 'undefined' ? req.query.fromDate : null,
+                    p_ToDate: req.query.toDate && req.query.toDate !== 'undefined' ? req.query.toDate : null,
 
                 }
             }).then(results => {
@@ -340,6 +380,7 @@ const getTowerMonitoringSubDetails = async (req, res) => {
 
 
 
+
 module.exports.saveTMCDetailsP = saveTMCDetailsP;
 module.exports.saveTMCDeviceBetteryStatusDetails = saveTMCDeviceBetteryStatusDetails;
 module.exports.saveTMCDeviceBetteryStatusDetailsP = saveTMCDeviceBetteryStatusDetailsP;
@@ -356,3 +397,6 @@ module.exports.getTowerMonitoringSubDetails = getTowerMonitoringSubDetails;
 module.exports.getTMCDeviceMappingDetails = getTMCDeviceMappingDetails;
 module.exports.getTMCTowerNotificationDetails = getTMCTowerNotificationDetails;
 module.exports.updateTMCTowerNotificationDetails = updateTMCTowerNotificationDetails;
+module.exports.getTMCTowerActiveStatusDetails = getTMCTowerActiveStatusDetails;
+
+module.exports.getDeviceBatteryStatusLog = getDeviceBatteryStatusLog;

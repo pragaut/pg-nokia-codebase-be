@@ -383,7 +383,7 @@ const getTowerMonitoringSubDetails = async (req, res) => {
 
 const getEmployeeTMCWorkingStatus = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_get_employee_tmc_active_status(:p_EmployeeMasterId, :p_Type)',
+        db.sequelize.query('call asp_nk_get_employee_tmc_working_status(:p_EmployeeMasterId, :p_Type)',
             {
                 replacements: {
                     p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',

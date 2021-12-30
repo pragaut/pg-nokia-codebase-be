@@ -66,7 +66,7 @@ module.exports = function (sequelize, DataTypes) {
             field: 'clamp2_status'
         },
         statusOn: {
-            type: DataTypes.DATETIME,
+            type: DataTypes.DATE,
             field: 'status_on'
         },
         isWorkStarted: {

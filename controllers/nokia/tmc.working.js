@@ -179,14 +179,12 @@ const getTMCTowerNotificationDetails = async (req, res) => {
                 responseHelper.success(res, 200, results, 'tower notification details get successfully', '-1', results.length);
             }).catch(err => {
                 responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower notification details');
-
             });
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower notification details');
     }
 };
-
 const updateTMCTowerNotificationDetails = async (req, res) => {
     try {
         const TowerNotificationDetails = req.body;
@@ -195,8 +193,7 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
         if (req.user && req.user.id !== null)
             UserId = req.user.id;
-        let StatusUpdatedOn = new Date();
-        console.log("StatusUpdatedOn : >>>>>", StatusUpdatedOn);
+        let StatusUpdatedOn = new Date(); 
         let towerNotificationDetails = {
            id : TowerNotificationDetails.id,
            remarks : TowerNotificationDetails.remarks,
@@ -216,6 +213,29 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'saving Tower Notification Details Details');
+    }
+};
+
+//#endregion
+
+//#region Get Tower Active Status Details
+
+const getTMCTowerActiveStatusDetails = async(req, res) => {
+    console.log("getTMCTowerActiveStatusDetails : >>>>","AA Gaya");
+    try {
+        db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_tower_id)',
+            {
+                replacements: {
+                    p_tower_id: req.query.towerId ? req.query.towerId : ''
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower active status get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower active status details');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower active status details');
     }
 };
 
@@ -347,3 +367,4 @@ module.exports.getTowerMonitoringSubDetails = getTowerMonitoringSubDetails;
 module.exports.getTMCDeviceMappingDetails = getTMCDeviceMappingDetails;
 module.exports.getTMCTowerNotificationDetails = getTMCTowerNotificationDetails;
 module.exports.updateTMCTowerNotificationDetails = updateTMCTowerNotificationDetails;
+module.exports.getTMCTowerActiveStatusDetails = getTMCTowerActiveStatusDetails;

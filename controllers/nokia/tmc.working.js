@@ -18,18 +18,18 @@ const saveTMCDetailsP = async (req, res) => {
             //const result = await dal.saveData(db.tmcData, tmcData, undefined.req.user.id);
 
             let result = undefined;
-            let towerMonitoringDetailId = dal.uuid(db.deviceBatteryStatusDetails.name);
+            let towerMonitoringSubDetailId = dal.uuid(db.towerMonitoringSubDetails.name);
             let deviceBatteryStatusDetailId = dal.uuid(db.deviceBatteryStatusDetails.name);
 
             await db.sequelize.query('call asp_nk_save_tower_monitoring_details(:p_tower_monitoring_sub_detail_id,:p_device_battery_status_detail_id,:p_mac_address,:p_clamp_status,:p_is_clamp1_connected,:p_clamp1_status,:p_is_clamp2_connected,:p_clamp2_status,:p_sea_level_height,:p_main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:p_dataTime,:p_created_by)', {
                 replacements: {
-                    p_tower_monitoring_sub_detail_id: towerMonitoringDetailId,
+                    p_tower_monitoring_sub_detail_id: towerMonitoringSubDetailId,
                     p_device_battery_status_detail_id: deviceBatteryStatusDetailId,
                     p_mac_address: tmcData.macAddress ? tmcData.macAddress : '',
                     p_clamp_status: tmcData.clampStatus ? tmcData.clampStatus : '',
                     p_is_clamp1_connected: tmcData.isClamp1Connected,
                     p_clamp1_status: tmcData.clamp1Status ? tmcData.clamp1Status : '',
-                    p_is_clamp2_connected: isClamp2Connected,
+                    p_is_clamp2_connected:  tmcData.isClamp2Connected,
                     p_clamp2_status: tmcData.clamp2Status ? tmcData.clamp2Status : '',
                     p_sea_level_height: tmcData.seaLevelheight ? tmcData.seaLevelheight : 0,
                     p_main_device_battery: tmcData.mainDeviceBattery ? tmcData.mainDeviceBattery : '',

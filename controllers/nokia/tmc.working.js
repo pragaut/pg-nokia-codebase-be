@@ -12,23 +12,32 @@ const { json } = require('express');
 
 const saveTMCDetailsP = async (req, res) => {
     try {
-        let deviceBatteryDetails = req.body;
-        console.log("deviceBatteryDetails : ", deviceBatteryDetails);
-        if (util.missingRequiredFields('deviceBatteryDetails', deviceBatteryDetails, res) === '') {
-            //const result = await dal.saveData(db.deviceBatteryDetails, deviceBatteryDetails, undefined.req.user.id);
+        let tmcData = req.body;
+        console.log("tmc req data : ", tmcData);
+        if (util.missingRequiredFields('towerMonitoringDetails', tmcData, res) === '') {
+            //const result = await dal.saveData(db.tmcData, tmcData, undefined.req.user.id);
 
             let result = undefined;
-            let id = dal.uuid(db.deviceBatteryStatusDetails.name);
+            let towerMonitoringSubDetailId = dal.uuid(db.towerMonitoringSubDetails.name);
+            let deviceBatteryStatusDetailId = dal.uuid(db.deviceBatteryStatusDetails.name);
 
-            await db.sequelize.query('call asp_nk_save_device_battery_status_details(:p_device_battery_status_detail_id,:p_mac_address,:p_main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:p_created_by)', {
+            await db.sequelize.query('call asp_nk_save_tower_monitoring_details(:p_tower_monitoring_sub_detail_id,:p_device_battery_status_detail_id,:p_mac_address,:p_clamp_status,:p_is_clamp1_connected,:p_clamp1_status,:p_is_clamp2_connected,:p_clamp2_status,:p_sea_level_height,:p_main_device_battery,:p_child1_device_battery,:p_child2_device_battery,:p_child3_device_battery,:p_dataTime,:p_created_by)', {
                 replacements: {
-                    p_device_battery_status_detail_id: id,
-                    p_mac_address: deviceBatteryDetails.macAddress ? deviceBatteryDetails.macAddress : '',
-                    p_main_device_battery: deviceBatteryDetails.mainDeviceBattery ? deviceBatteryDetails.mainDeviceBattery : '',
-                    p_child1_device_battery: deviceBatteryDetails.child1DeviceBattery ? deviceBatteryDetails.child1DeviceBattery : '',
-                    p_child2_device_battery: deviceBatteryDetails.child2DeviceBattery ? deviceBatteryDetails.child2DeviceBattery : '',
-                    p_child3_device_battery: deviceBatteryDetails.child3DeviceBattery ? deviceBatteryDetails.child3DeviceBattery : '',
-                    p_created_by: deviceBatteryDetails.useId ? deviceBatteryDetails.useId : '',
+                    p_tower_monitoring_sub_detail_id: towerMonitoringSubDetailId,
+                    p_device_battery_status_detail_id: deviceBatteryStatusDetailId,
+                    p_mac_address: tmcData.macAddress ? tmcData.macAddress : '',
+                    p_clamp_status: tmcData.clampStatus ? tmcData.clampStatus : '',
+                    p_is_clamp1_connected: tmcData.isClamp1Connected,
+                    p_clamp1_status: tmcData.clamp1Status ? tmcData.clamp1Status : '',
+                    p_is_clamp2_connected:  tmcData.isClamp2Connected,
+                    p_clamp2_status: tmcData.clamp2Status ? tmcData.clamp2Status : '',
+                    p_sea_level_height: tmcData.seaLevelheight ? tmcData.seaLevelheight : 0,
+                    p_main_device_battery: tmcData.mainDeviceBattery ? tmcData.mainDeviceBattery : '',
+                    p_child1_device_battery: tmcData.child1DeviceBattery ? tmcData.child1DeviceBattery : '',
+                    p_child2_device_battery: tmcData.child2DeviceBattery ? tmcData.child2DeviceBattery : '',
+                    p_child3_device_battery: tmcData.child3DeviceBattery ? tmcData.child3DeviceBattery : '',
+                    p_dataTime: tmcData.dataTime ? tmcData.dataTime : new Date(),
+                    p_created_by: tmcData.useId ? tmcData.useId : '',
                 }
             }).then(results => {
                 console.log("saveTMCDetailsP results : ", results);

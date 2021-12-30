@@ -18,11 +18,11 @@ module.exports = function (sequelize, DataTypes) {
             field: 'rigger_employee_id'
         },
         startDateTime: {
-            type: DataTypes.DATETIME,
+            type: DataTypes.DATE,
             field: 'start_date_time'
         },
         endDateTime: {
-            type: DataTypes.DATETIME,
+            type: DataTypes.DATE,
             field: 'end_date_time'
         },
         yearId: {

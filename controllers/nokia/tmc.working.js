@@ -390,15 +390,89 @@ const getEmployeeTMCWorkingStatus = async (req, res) => {
                     p_Type: '',
                 }
             }).then(results => {
-                responseHelper.success(res, 200, results, 'tower notification details get successfully', '-1', results.length);
+                responseHelper.success(res, 200, results, 'employee status get successfully', '-1', results.length);
             }).catch(err => {
-                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower notification details');
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting employee status details');
             });
     }
     catch (error) {
-        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower notification details');
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'employee status details');
     }
 };
+
+
+const getTowerDetailsByOrgDetailsId = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_towerdetails_by_org_details_id_or_employee_id(:p_OrgDetailsId, :p_EmployeeMasterId)',
+            {
+                replacements: {
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
+                  }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower master details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower master');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower master details');
+    }
+};
+
+
+const getDeviceDetailsByOrgDetailsId = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_device_details_by_employee_id_or_org_details_id(:p_OrgDetailsId, :p_EmployeeMasterId)',
+            {
+                replacements: {
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
+                  }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'device master details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting device master');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'device master details');
+    }
+};
+
+
+const saveTMCAndRiggerDetails = async (req, res) => {
+    try {
+        let towerMonitoringDetails = req.body;
+        if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
+             let result = undefined;
+            let id = dal.uuid(db.towerMonitoringDetails.name);
+
+            db.sequelize.query('call asp_nk_save_tmc_and_rigger_details(:p_TowerMonitoringDetailsId,:p_TowerId,:p_DeviceRegistrationDetailsId,:p_EmployeeMasterId,:p_YearId)', {
+                replacements: {
+                    p_TowerMonitoringDetailsId: id,
+                    p_TowerId: req.towerId ? req.towerId : '',
+                    p_DeviceRegistrationDetailsId: req.deviceRegistrationDetailsId ? req.deviceRegistrationDetailsId : '',
+                    p_EmployeeMasterId: req.employeeMasterId ? req.employeeMasterId : '',
+                    p_YearId: req.yearId ? req.yearId : '',
+                 }
+            }).then(results => {
+                result = results;
+            }).catch(error => {
+                result = error;
+            })
+            if (result) {
+                responseHelper.success(res, codes.success, result, 'TMC and rigger details saved successfully !!', result.id);
+            }
+            else {
+                responseHelper.error(res, result, codes.ERROR, 'Error in saving TMC and rigger details !!');
+            }
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving TMC and rigger details !!');
+    }
+}
 //#endregion
 
 
@@ -422,3 +496,6 @@ module.exports.getTMCTowerActiveStatusDetails = getTMCTowerActiveStatusDetails;
 
 module.exports.getDeviceBatteryStatusLog = getDeviceBatteryStatusLog;
 module.exports.getEmployeeTMCWorkingStatus = getEmployeeTMCWorkingStatus;
+module.exports.getTowerDetailsByOrgDetailsId = getTowerDetailsByOrgDetailsId;
+module.exports.getDeviceDetailsByOrgDetailsId = getDeviceDetailsByOrgDetailsId;
+module.exports.saveTMCAndRiggerDetails = saveTMCAndRiggerDetails;

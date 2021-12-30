@@ -94,5 +94,11 @@ router.get('/towerActiveStatusDetails', (req, res) => workingTMC.getTMCTowerActi
 
 //#endregion ----------region TMC end--------------------///
 
+//#region  TMC API Login
+router.get('/employeeTMCWorkingStatus', (req, res) => workingTMC.getEmployeeTMCWorkingStatus(req, res));
+router.get('/towerDetailsByOrgDetailsId', (req, res) => workingTMC.getTowerDetailsByOrgDetailsId(req, res));
+router.get('/deviceDetailsByOrgDetailsId', (req, res) => workingTMC.getDeviceDetailsByOrgDetailsId(req, res));
+router.post('/saveTMCAndRiggerDetails', (req, res) => workingTMC.saveTMCAndRiggerDetails(req, res));
+//#endregion
 
 module.exports = router;

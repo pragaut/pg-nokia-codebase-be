@@ -193,7 +193,7 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
         if (req.user && req.user.id !== null)
             UserId = req.user.id;
-        let StatusUpdatedOn = new Date(); 
+        let StatusUpdatedOn = new Date();
         let towerNotificationDetails = {
             id: TowerNotificationDetails.id,
             remarks: TowerNotificationDetails.remarks,
@@ -220,8 +220,8 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
 //#region Get Tower Active Status Details
 
-const getTMCTowerActiveStatusDetails = async(req, res) => {
-    console.log("getTMCTowerActiveStatusDetails : >>>>","AA Gaya");
+const getTMCTowerActiveStatusDetails = async (req, res) => {
+    console.log("getTMCTowerActiveStatusDetails : >>>>", "AA Gaya");
     try {
         db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_tower_id)',
             {
@@ -303,12 +303,13 @@ const getTowerMonitoringDetails = async (req, res) => {
 };
 const getDeviceStatusDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_device_status_details_get_device_status_details(:p_DeviceStatusDetailId, :p_DeviceRegistrationDetailId, :p_MacAddress)',
+        db.sequelize.query('call asp_nk_device_status_details_get_device_status_details(:p_DeviceStatusDetailId, :p_DeviceRegistrationDetailId, :p_MacAddress,:p_TowerMonitoringDetailId)',
             {
                 replacements: {
                     p_DeviceStatusDetailId: req.query.deviceStatusDetailId ? req.query.deviceStatusDetailId : '',
                     p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
                     p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
+                    p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'device status details get successfully', '-1', results.length);
@@ -369,7 +370,27 @@ const getTowerMonitoringSubDetails = async (req, res) => {
 //#endregion
 
 
+//#region  API For Mobile Application
 
+const getEmployeeTMCWorkingStatus = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_employee_tmc_active_status(:p_EmployeeMasterId, :p_Type)',
+            {
+                replacements: {
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
+                    p_Type: '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower notification details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower notification details');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower notification details');
+    }
+};
+//#endregion
 
 
 module.exports.saveTMCDetailsP = saveTMCDetailsP;
@@ -391,3 +412,4 @@ module.exports.updateTMCTowerNotificationDetails = updateTMCTowerNotificationDet
 module.exports.getTMCTowerActiveStatusDetails = getTMCTowerActiveStatusDetails;
 
 module.exports.getDeviceBatteryStatusLog = getDeviceBatteryStatusLog;
+module.exports.getEmployeeTMCWorkingStatus = getEmployeeTMCWorkingStatus;

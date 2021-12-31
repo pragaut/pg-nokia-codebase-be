@@ -504,7 +504,7 @@ const getTMCDataByEmployeeAndRoleMasterId = async (req, res) => {
                 replacements: {
                     p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
                     p_TowerMasterId: req.query.towerMasterId ? req.query.towerMasterId : '',
-                    p_EmployeeMasterId: req.query.EmployeeMasterId ? req.query.EmployeeMasterId : '',
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
                     p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
                     p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
                     p_MacAddress: req.query.macAddress ? req.query.macAddress : '',

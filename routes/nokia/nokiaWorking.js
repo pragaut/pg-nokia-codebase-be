@@ -100,6 +100,12 @@ router.get('/towerDetailsByOrgDetailsId', (req, res) => workingTMC.getTowerDetai
 router.get('/deviceDetailsByOrgDetailsId', (req, res) => workingTMC.getDeviceDetailsByOrgDetailsId(req, res));
 router.post('/saveTMCAndRiggerDetails', (req, res) => workingTMC.saveTMCAndRiggerDetails(req, res));
 router.put('/outTMCAndRiggerDetails', (req, res) => workingTMC.outTMCAndRiggerDetails(req, res));
+router.get('/getTMCDataByEmployeeAndRoleMasterId', (req, res) => workingTMC.getTMCDataByEmployeeAndRoleMasterId(req, res));
+
+router.post('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(req, res));
+router.put('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(req, res));
+
+
 //#endregion
 
 module.exports = router;

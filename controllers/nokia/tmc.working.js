@@ -460,7 +460,7 @@ const saveTMCAndRiggerDetails = async (req, res) => {
             }).then(results => {
                 console.log("------towerMonitoringDetails ---results------", results);
                 result = results;
-                responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger details saved successfully !!',  id);
+                responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger details saved successfully !!', id);
             }).catch(error => {
                 console.log("------towerMonitoringDetails ---error------", error);
                 responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC and rigger details !!');
@@ -485,7 +485,7 @@ const outTMCAndRiggerDetails = async (req, res) => {
                 result = await dal.saveData(db.towerMonitoringDetails, towerMonitoringDetails, undefined, userId);
             }
             if (result) {
-                responseHelper.success(res, codes.success, result, 'TMC and rigger out details saved successfully !!', result.id);
+                responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger out details saved successfully !!', '-1');
             }
             else {
                 responseHelper.error(res, result, codes.ERROR, 'Error in out TMC and rigger details !!');
@@ -494,6 +494,78 @@ const outTMCAndRiggerDetails = async (req, res) => {
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in out TMC and rigger details !!');
+    }
+}
+
+const getTMCDataByEmployeeAndRoleMasterId = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_tmc_details_by_employee_and_role_id(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_EmployeeMasterId,:p_RoleMasterId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_IsOnlyLiveTMCDataRequired,:p_FromDate,:p_ToDate)',
+            {
+                replacements: {
+                    p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
+                    p_TowerMasterId: req.query.towerMasterId ? req.query.towerMasterId : '',
+                    p_EmployeeMasterId: req.query.EmployeeMasterId ? req.query.EmployeeMasterId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
+                    p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
+                    p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
+                    p_UniqueId: req.query.uniqueId ? req.query.uniqueId : '',
+                    p_IsOnlyTodayDataRequired: req.query.isOnlyTodayDataRequired ? req.query.isOnlyTodayDataRequired : '0',
+                    p_IsOnlyLiveTMCDataRequired: req.query.isOnlyLiveTMCDataRequired ? req.query.isOnlyLiveTMCDataRequired : '1',
+                    p_FromDate: req.query.fromDate && req.query.fromDate !== 'undefined' ? req.query.fromDate : null,
+                    p_ToDate: req.query.toDate && req.query.toDate !== 'undefined' ? req.query.toDate : null,
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower monitoring details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower monitoring details');
+
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower monitoring details');
+    }
+};  
+const _FindTMCUserAlreadyExistOrNot = async (id, towerMonitoringDetailId,employeeId) => {
+    let where = [];
+    if (id && id !== null && id !== 'undefined') {
+        where.push(util.constructWheresForNotEqualSequelize('id', id));
+    }
+    where.push(util.constructWheresForSequelize('isActive', 1));
+    where.push(util.constructWheresForSequelize('towerMonitoringDetailId', towerMonitoringDetailId));
+    where.push(util.constructWheresForSequelize('employeeId', employeeId));
+
+    const towerMonitoringUserDetails = await dal.getList({ model: db.towerMonitoringUserDetails, where, order: [['createdAt', 'desc']], include: false, });
+    if (towerMonitoringUserDetails && towerMonitoringUserDetails.length > 0) {
+        return 'already exist'
+    }
+    else {
+        return 'success'
+    }
+}
+
+
+const saveTMCUserDetails = async (req, res) => {
+    try {
+        let towerMonitoringUserDetails = req.body;
+        let userId = req.query.userId ? req.query.userId : '-1';
+        let result = undefined;
+        const PKID = towerMonitoringUserDetails && towerMonitoringUserDetails.id ? towerMonitoringUserDetails.id : undefined;
+        const ChekAlreadyExist = await _FindTMCUserAlreadyExistOrNot(PKID, towerMonitoringUserDetails.towerMonitoringDetailId,towerMonitoringUserDetails.employeeId );
+        let CodeMsg = 'this user already exist for this TMC';
+        if (ChekAlreadyExist && ChekAlreadyExist !== "success") throw util.generateWarning(CodeMsg, codes.CODE_ALREADY_EXISTS);
+
+        if (util.missingRequiredFields('towerMonitoringUserDetails', towerMonitoringUserDetails, res) === '') {
+            result = await dal.saveData(db.towerMonitoringUserDetails, towerMonitoringUserDetails, undefined, userId);
+        }
+        if (result) {
+            responseHelper.success(res, codes.SUCCESS, result, 'TMC user details saved successfully !!', '-1');
+        }
+        else {
+            responseHelper.error(res, result, codes.ERROR, 'Error in saving TMS user details !!');
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving  TMC  user details !!');
     }
 }
 //#endregion
@@ -523,4 +595,6 @@ module.exports.getTowerDetailsByOrgDetailsId = getTowerDetailsByOrgDetailsId;
 module.exports.getDeviceDetailsByOrgDetailsId = getDeviceDetailsByOrgDetailsId;
 module.exports.saveTMCAndRiggerDetails = saveTMCAndRiggerDetails;
 module.exports.outTMCAndRiggerDetails = outTMCAndRiggerDetails;
+module.exports.getTMCDataByEmployeeAndRoleMasterId = getTMCDataByEmployeeAndRoleMasterId;
+module.exports.saveTMCUserDetails = saveTMCUserDetails;
 

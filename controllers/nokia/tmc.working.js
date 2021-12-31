@@ -285,6 +285,11 @@ const getDeviceBatteryStatusLog = async (req, res) => {
 };
 const getTowerMonitoringDetails = async (req, res) => {
     try {
+        let currentDate = new Date();
+        console.log('currentDate ------- ', currentDate);
+        let NewDate = util.dateAdd(currentDate, 'minute', 330);
+        console.log('NewDate ------- ', NewDate);
+        
         db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_IsOnlyLiveTMCDataRequired,:p_FromDate,:p_ToDate)',
             {
                 replacements: {
@@ -477,9 +482,13 @@ const saveTMCAndRiggerDetails = async (req, res) => {
 const outTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
+        let currentDate = new Date();
+        console.log('currentDate ------- ', currentDate);
+        let NewDate = util.dateAdd(currentDate, 'minute', 330);
+        console.log('NewDate ------- ', NewDate);
         let dataforsubmit = {
             id: towerMonitoringDetails.towerMonitoringDetailId,
-            endDateTime: new Date()
+            endDateTime: NewDate
         }
         let userId = req.query.userId ? req.query.userId : '-1';
         let result = undefined;

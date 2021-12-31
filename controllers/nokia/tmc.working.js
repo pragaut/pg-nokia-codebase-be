@@ -478,12 +478,15 @@ const saveTMCAndRiggerDetails = async (req, res) => {
 const outTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
-        towerMonitoringDetails.endDateTime = new Date();
+        let dataforsubmit = {
+            id: towerMonitoringDetails.towerMonitoringDetailId,
+            endDateTime: new Date()
+        }
         let userId = req.query.userId ? req.query.userId : '-1';
-        console.log("----towerMonitoringDetails-----", towerMonitoringDetails);
+        console.log("----towerMonitoringDetails-----", dataforsubmit);
         let result = undefined;
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
-            result = await dal.saveData(db.towerMonitoringDetails, towerMonitoringDetails, undefined, userId);
+            result = await dal.saveData(db.towerMonitoringDetails, dataforsubmit, undefined, userId);
         }
         console.log("----result-----", result);
         if (result) {

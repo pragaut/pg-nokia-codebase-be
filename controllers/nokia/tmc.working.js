@@ -29,7 +29,7 @@ const saveTMCDetailsP = async (req, res) => {
                     p_clamp_status: tmcData.clampStatus ? tmcData.clampStatus : '',
                     p_is_clamp1_connected: tmcData.isClamp1Connected,
                     p_clamp1_status: tmcData.clamp1Status ? tmcData.clamp1Status : '',
-                    p_is_clamp2_connected:  tmcData.isClamp2Connected,
+                    p_is_clamp2_connected: tmcData.isClamp2Connected,
                     p_clamp2_status: tmcData.clamp2Status ? tmcData.clamp2Status : '',
                     p_sea_level_height: tmcData.seaLevelheight ? tmcData.seaLevelheight : 0,
                     p_main_device_battery: tmcData.mainDeviceBattery ? tmcData.mainDeviceBattery : '',
@@ -408,7 +408,7 @@ const getTowerDetailsByOrgDetailsId = async (req, res) => {
                 replacements: {
                     p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
                     p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
-                  }
+                }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'tower master details get successfully', '-1', results.length);
             }).catch(err => {
@@ -428,7 +428,7 @@ const getDeviceDetailsByOrgDetailsId = async (req, res) => {
                 replacements: {
                     p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
                     p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
-                  }
+                }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'device master details get successfully', '-1', results.length);
             }).catch(err => {
@@ -445,7 +445,7 @@ const saveTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
-             let result = undefined;
+            let result = undefined;
             let id = dal.uuid(db.towerMonitoringDetails.name);
 
             db.sequelize.query('call asp_nk_save_tmc_and_rigger_details(:p_TowerMonitoringDetailsId,:p_TowerId,:p_DeviceRegistrationDetailsId,:p_EmployeeMasterId,:p_YearId)', {
@@ -455,7 +455,7 @@ const saveTMCAndRiggerDetails = async (req, res) => {
                     p_DeviceRegistrationDetailsId: req.deviceRegistrationDetailsId ? req.deviceRegistrationDetailsId : '',
                     p_EmployeeMasterId: req.employeeMasterId ? req.employeeMasterId : '',
                     p_YearId: req.yearId ? req.yearId : '',
-                 }
+                }
             }).then(results => {
                 result = results;
             }).catch(error => {
@@ -471,6 +471,28 @@ const saveTMCAndRiggerDetails = async (req, res) => {
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving TMC and rigger details !!');
+    }
+}
+
+const outTMCAndRiggerDetails = async (req, res) => {
+    try {
+        let towerMonitoringDetails = req.body;
+        let userId = req.query.userId ? req.query.userId : '-1';
+        if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
+            let result = undefined;
+            if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
+                result = await dal.saveData(db.towerMonitoringDetails, towerMonitoringDetails, undefined, userId);
+            }
+            if (result) {
+                responseHelper.success(res, codes.success, result, 'TMC and rigger out details saved successfully !!', result.id);
+            }
+            else {
+                responseHelper.error(res, result, codes.ERROR, 'Error in out TMC and rigger details !!');
+            }
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in out TMC and rigger details !!');
     }
 }
 //#endregion
@@ -499,3 +521,5 @@ module.exports.getEmployeeTMCWorkingStatus = getEmployeeTMCWorkingStatus;
 module.exports.getTowerDetailsByOrgDetailsId = getTowerDetailsByOrgDetailsId;
 module.exports.getDeviceDetailsByOrgDetailsId = getDeviceDetailsByOrgDetailsId;
 module.exports.saveTMCAndRiggerDetails = saveTMCAndRiggerDetails;
+module.exports.outTMCAndRiggerDetails = outTMCAndRiggerDetails;
+

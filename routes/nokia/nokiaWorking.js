@@ -99,6 +99,7 @@ router.get('/employeeTMCWorkingStatus', (req, res) => workingTMC.getEmployeeTMCW
 router.get('/towerDetailsByOrgDetailsId', (req, res) => workingTMC.getTowerDetailsByOrgDetailsId(req, res));
 router.get('/deviceDetailsByOrgDetailsId', (req, res) => workingTMC.getDeviceDetailsByOrgDetailsId(req, res));
 router.post('/saveTMCAndRiggerDetails', (req, res) => workingTMC.saveTMCAndRiggerDetails(req, res));
+router.put('/outTMCAndRiggerDetails', (req, res) => workingTMC.outTMCAndRiggerDetails(req, res));
 //#endregion
 
 module.exports = router;

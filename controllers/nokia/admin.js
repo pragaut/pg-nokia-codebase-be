@@ -405,13 +405,14 @@ const getTowerAllotmentMaster = async (req, res) => {
 * @param {*} res 
 */
 
-const _FindTowerAllotmentMasterAlreadyExistOrNot = async (id, orgDetailsId) => {
+const _FindTowerAllotmentMasterAlreadyExistOrNot = async (id, orgDetailsId,towerId) => {
     let where = [];
     if (id && id !== null && id !== 'undefined') {
         where.push(util.constructWheresForNotEqualSequelize('id', id));
     }
     where.push(util.constructWheresForSequelize('isActive', 1));
     where.push(util.constructWheresForSequelize('orgDetailsId', orgDetailsId));
+    where.push(util.constructWheresForSequelize('towerId', towerId));
 
     const towerAllotmentMasterDetails = await dal.getList({ model: db.towerAllotmentMaster, where, order: [['createdAt', 'desc']], include: false, });
     if (towerAllotmentMasterDetails && towerAllotmentMasterDetails.length > 0) {
@@ -424,12 +425,10 @@ const _FindTowerAllotmentMasterAlreadyExistOrNot = async (id, orgDetailsId) => {
 
 const saveTowerAllotmentMaster = async (req, res) => {
     try {
-        const towerAllotmentMaster = req.body;
-
-
+        const towerAllotmentMaster = req.body;  
         console.log("Tower Master : ", towerAllotmentMaster);
         const PKID = towerAllotmentMaster && towerAllotmentMaster.id ? towerAllotmentMaster.id : undefined;
-        const ChekAlreadyExist = await _FindTowerAllotmentMasterAlreadyExistOrNot(PKID, towerAllotmentMaster.orgDetailsId);
+        const ChekAlreadyExist = await _FindTowerAllotmentMasterAlreadyExistOrNot(PKID, towerAllotmentMaster.orgDetailsId,towerAllotmentMaster.towerId);
         let CodeMsg = towerAllotmentMaster && towerAllotmentMaster.orgDetailsId ? 'Tower  "' + towerAllotmentMaster.orgDetailsId + '" already in use' : 'Tower allotment already in use';
         if (ChekAlreadyExist && ChekAlreadyExist !== "success") throw util.generateWarning(CodeMsg, codes.CODE_ALREADY_EXISTS);
 

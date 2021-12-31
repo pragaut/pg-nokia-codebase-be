@@ -99,7 +99,7 @@ router.get('/employeeTMCWorkingStatus', (req, res) => workingTMC.getEmployeeTMCW
 router.get('/towerDetailsByOrgDetailsId', (req, res) => workingTMC.getTowerDetailsByOrgDetailsId(req, res));
 router.get('/deviceDetailsByOrgDetailsId', (req, res) => workingTMC.getDeviceDetailsByOrgDetailsId(req, res));
 router.post('/saveTMCAndRiggerDetails', (req, res) => workingTMC.saveTMCAndRiggerDetails(req, res));
-router.put('/outTMCAndRiggerDetails', (req, res) => workingTMC.outTMCAndRiggerDetails(req, res));
+router.post('/outTMCAndRiggerDetails', (req, res) => workingTMC.outTMCAndRiggerDetails(req, res));
 router.get('/getTMCDataByEmployeeAndRoleMasterId', (req, res) => workingTMC.getTMCDataByEmployeeAndRoleMasterId(req, res));
 
 router.post('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(req, res));

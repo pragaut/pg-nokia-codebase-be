@@ -480,20 +480,22 @@ const outTMCAndRiggerDetails = async (req, res) => {
         let towerMonitoringDetails = req.body;
         towerMonitoringDetails.endDateTime = new Date();
         let userId = req.query.userId ? req.query.userId : '-1';
+        console.log("----towerMonitoringDetails-----", towerMonitoringDetails);
+        let result = undefined;
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
-            let result = undefined;
-            if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
-                result = await dal.saveData(db.towerMonitoringDetails, towerMonitoringDetails, undefined, userId);
-            }
-            if (result) {
-                responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger out details saved successfully !!', '-1');
-            }
-            else {
-                responseHelper.error(res, result, codes.ERROR, 'Error in out TMC and rigger details !!');
-            }
+            result = await dal.saveData(db.towerMonitoringDetails, towerMonitoringDetails, undefined, userId);
+        }
+        console.log("----result-----", result);
+        if (result) {
+            responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger out details saved successfully !!', '-1');
+        }
+        else {
+            console.log("----result-errror----", result);
+            responseHelper.error(res, result, codes.ERROR, 'Error in out TMC and rigger details !!');
         }
     }
     catch (error) {
+        console.log("----result-errror ex----", error);
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in out TMC and rigger details !!');
     }
 }

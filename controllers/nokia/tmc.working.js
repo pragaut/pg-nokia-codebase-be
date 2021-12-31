@@ -452,10 +452,10 @@ const saveTMCAndRiggerDetails = async (req, res) => {
             db.sequelize.query('call asp_nk_save_tmc_and_rigger_details(:p_TowerMonitoringDetailsId,:p_TowerId,:p_DeviceRegistrationDetailsId,:p_EmployeeMasterId,:p_YearId)', {
                 replacements: {
                     p_TowerMonitoringDetailsId: id,
-                    p_TowerId: req.towerId ? req.towerId : '',
-                    p_DeviceRegistrationDetailsId: req.deviceRegistrationDetailsId ? req.deviceRegistrationDetailsId : '',
-                    p_EmployeeMasterId: req.employeeMasterId ? req.employeeMasterId : '',
-                    p_YearId: req.yearId ? req.yearId : '',
+                    p_TowerId: towerMonitoringDetails.towerId ? towerMonitoringDetails.towerId : '',
+                    p_DeviceRegistrationDetailsId: towerMonitoringDetails.deviceRegistrationDetailsId ? towerMonitoringDetails.deviceRegistrationDetailsId : '',
+                    p_EmployeeMasterId: towerMonitoringDetails.employeeMasterId ? towerMonitoringDetails.employeeMasterId : '',
+                    p_YearId: towerMonitoringDetails.yearId ? towerMonitoringDetails.yearId : '',
                 }
             }).then(results => {
                 console.log("------towerMonitoringDetails ---results------",results);

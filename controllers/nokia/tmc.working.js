@@ -285,7 +285,7 @@ const getDeviceBatteryStatusLog = async (req, res) => {
 };
 const getTowerMonitoringDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_FromDate,:p_ToDate)',
+        db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_IsOnlyLiveTMCDataRequired,:p_FromDate,:p_ToDate)',
             {
                 replacements: {
                     p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
@@ -295,6 +295,7 @@ const getTowerMonitoringDetails = async (req, res) => {
                     p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
                     p_UniqueId: req.query.uniqueId ? req.query.uniqueId : '',
                     p_IsOnlyTodayDataRequired: req.query.isOnlyTodayDataRequired ? req.query.isOnlyTodayDataRequired : '0',
+                    p_IsOnlyLiveTMCDataRequired: req.query.isOnlyLiveTMCDataRequired ? req.query.isOnlyLiveTMCDataRequired : '1',
                     p_FromDate: req.query.fromDate && req.query.fromDate !== 'undefined' ? req.query.fromDate : null,
                     p_ToDate: req.query.toDate && req.query.toDate !== 'undefined' ? req.query.toDate : null,
 
@@ -444,7 +445,7 @@ const getDeviceDetailsByOrgDetailsId = async (req, res) => {
 const saveTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
-        console.log("------towerMonitoringDetails------", towerMonitoringDetails);
+
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
             let result = undefined;
             let id = dal.uuid(db.towerMonitoringDetails.name);
@@ -458,11 +459,9 @@ const saveTMCAndRiggerDetails = async (req, res) => {
                     p_YearId: towerMonitoringDetails.yearId ? towerMonitoringDetails.yearId : '',
                 }
             }).then(results => {
-                console.log("------towerMonitoringDetails ---results------", results);
                 result = results;
                 responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger details saved successfully !!', id);
             }).catch(error => {
-                console.log("------towerMonitoringDetails ---error------", error);
                 responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC and rigger details !!');
             })
         }
@@ -483,22 +482,18 @@ const outTMCAndRiggerDetails = async (req, res) => {
             endDateTime: new Date()
         }
         let userId = req.query.userId ? req.query.userId : '-1';
-        console.log("----towerMonitoringDetails-----", dataforsubmit);
         let result = undefined;
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
             result = await dal.saveData(db.towerMonitoringDetails, dataforsubmit, undefined, userId);
         }
-        console.log("----result-----", result);
         if (result) {
             responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger out details saved successfully !!', '-1');
         }
         else {
-            console.log("----result-errror----", result);
             responseHelper.error(res, result, codes.ERROR, 'Error in out TMC and rigger details !!');
         }
     }
     catch (error) {
-        console.log("----result-errror ex----", error);
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in out TMC and rigger details !!');
     }
 }

@@ -478,6 +478,7 @@ const saveTMCAndRiggerDetails = async (req, res) => {
 const outTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
+        towerMonitoringDetails.endDateTime = new Date();
         let userId = req.query.userId ? req.query.userId : '-1';
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
             let result = undefined;
@@ -518,14 +519,13 @@ const getTMCDataByEmployeeAndRoleMasterId = async (req, res) => {
                 responseHelper.success(res, 200, results, 'tower monitoring details get successfully', '-1', results.length);
             }).catch(err => {
                 responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower monitoring details');
-
             });
     }
     catch (error) {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower monitoring details');
     }
-};  
-const _FindTMCUserAlreadyExistOrNot = async (id, towerMonitoringDetailId,employeeId) => {
+};
+const _FindTMCUserAlreadyExistOrNot = async (id, towerMonitoringDetailId, employeeId) => {
     let where = [];
     if (id && id !== null && id !== 'undefined') {
         where.push(util.constructWheresForNotEqualSequelize('id', id));
@@ -550,7 +550,7 @@ const saveTMCUserDetails = async (req, res) => {
         let userId = req.query.userId ? req.query.userId : '-1';
         let result = undefined;
         const PKID = towerMonitoringUserDetails && towerMonitoringUserDetails.id ? towerMonitoringUserDetails.id : undefined;
-        const ChekAlreadyExist = await _FindTMCUserAlreadyExistOrNot(PKID, towerMonitoringUserDetails.towerMonitoringDetailId,towerMonitoringUserDetails.employeeId );
+        const ChekAlreadyExist = await _FindTMCUserAlreadyExistOrNot(PKID, towerMonitoringUserDetails.towerMonitoringDetailId, towerMonitoringUserDetails.employeeId);
         let CodeMsg = 'this user already exist for this TMC';
         if (ChekAlreadyExist && ChekAlreadyExist !== "success") throw util.generateWarning(CodeMsg, codes.CODE_ALREADY_EXISTS);
 

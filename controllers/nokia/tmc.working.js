@@ -460,7 +460,7 @@ const saveTMCAndRiggerDetails = async (req, res) => {
             }).then(results => {
                 console.log("------towerMonitoringDetails ---results------", results);
                 result = results;
-                responseHelper.success(res, codes.success, result, 'TMC and rigger details saved successfully !!',  id);
+                responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger details saved successfully !!',  id);
             }).catch(error => {
                 console.log("------towerMonitoringDetails ---error------", error);
                 responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC and rigger details !!');

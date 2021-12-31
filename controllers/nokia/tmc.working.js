@@ -444,7 +444,7 @@ const getDeviceDetailsByOrgDetailsId = async (req, res) => {
 const saveTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
-        console.log("------towerMonitoringDetails------",towerMonitoringDetails);
+        console.log("------towerMonitoringDetails------", towerMonitoringDetails);
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
             let result = undefined;
             let id = dal.uuid(db.towerMonitoringDetails.name);
@@ -458,20 +458,16 @@ const saveTMCAndRiggerDetails = async (req, res) => {
                     p_YearId: towerMonitoringDetails.yearId ? towerMonitoringDetails.yearId : '',
                 }
             }).then(results => {
-                console.log("------towerMonitoringDetails ---results------",results);
-       
+                console.log("------towerMonitoringDetails ---results------", results);
                 result = results;
-            }).catch(error => {
-                console.log("------towerMonitoringDetails ---error------",error);
-       
-                result = error;
-            })
-            if (result) {
                 responseHelper.success(res, codes.success, result, 'TMC and rigger details saved successfully !!', result.id);
-            }
-            else {
-                responseHelper.error(res, result, codes.ERROR, 'Error in saving TMC and rigger details !!');
-            }
+            }).catch(error => {
+                console.log("------towerMonitoringDetails ---error------", error);
+                responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC and rigger details !!');
+            })
+        }
+        else {
+            responseHelper.error(res, 'some field missing', codes.ERROR, 'Error in saving TMC and rigger details !!');
         }
     }
     catch (error) {

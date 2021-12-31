@@ -444,6 +444,7 @@ const getDeviceDetailsByOrgDetailsId = async (req, res) => {
 const saveTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
+        console.log("------towerMonitoringDetails------",towerMonitoringDetails);
         if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
             let result = undefined;
             let id = dal.uuid(db.towerMonitoringDetails.name);
@@ -457,8 +458,12 @@ const saveTMCAndRiggerDetails = async (req, res) => {
                     p_YearId: req.yearId ? req.yearId : '',
                 }
             }).then(results => {
+                console.log("------towerMonitoringDetails ---results------",results);
+       
                 result = results;
             }).catch(error => {
+                console.log("------towerMonitoringDetails ---error------",error);
+       
                 result = error;
             })
             if (result) {

@@ -154,11 +154,13 @@ const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
 //#region  Device mapping details
 const getTMCDeviceMappingDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_device_mapping_get_device_mapping_details(:p_device_registration_detail_id, :p_tower_id)',
+        db.sequelize.query('call asp_nk_device_mapping_get_device_mapping_details(:p_device_registration_detail_id, :p_tower_id,:p_OrgDetailsId,:p_RoleMasterId)',
             {
                 replacements: {
                     p_device_registration_detail_id: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
                     p_tower_id: req.query.towerId ? req.query.towerId : '',
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'device mapping details get successfully', '-1', results.length);
@@ -232,12 +234,14 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 //#region Get Tower Active Status Details
 
 const getTMCTowerActiveStatusDetails = async (req, res) => {
-    console.log("getTMCTowerActiveStatusDetails : >>>>", "AA Gaya");
+   // console.log("getTMCTowerActiveStatusDetails : >>>>", "AA Gaya");
     try {
-        db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_tower_id)',
+        db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_TowerId,:p_OrgDetailsId,:p_RoleMasterId)',
             {
                 replacements: {
-                    p_tower_id: req.query.towerId ? req.query.towerId : ''
+                    p_TowerId: req.query.towerId ? req.query.towerId : '',
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'tower active status get successfully', '-1', results.length);

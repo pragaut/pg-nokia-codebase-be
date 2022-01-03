@@ -105,6 +105,8 @@ router.get('/getTMCDataByEmployeeAndRoleMasterId', (req, res) => workingTMC.getT
 router.post('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(req, res));
 router.put('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(req, res));
 
+router.post('/saveTMCUserOutOfRangeNotificationDetails', (req, res) => workingTMC.saveTMCUserOutOfRangeNotificationDetails(req, res));
+router.post('/updateTMCUserFCMDetails', (req, res) => workingTMC.updateTMCUserFCMDetails(req, res));
 
 //#endregion
 

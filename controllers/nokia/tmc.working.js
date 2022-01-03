@@ -289,7 +289,7 @@ const getTowerMonitoringDetails = async (req, res) => {
         console.log('currentDate ------- ', currentDate);
         let NewDate = util.dateAdd(currentDate, 'minute', 330);
         console.log('NewDate ------- ', NewDate);
-        
+
         db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_IsOnlyLiveTMCDataRequired,:p_FromDate,:p_ToDate)',
             {
                 replacements: {
@@ -577,6 +577,60 @@ const saveTMCUserDetails = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving  TMC  user details !!');
     }
 }
+
+
+const saveTMCUserOutOfRangeNotificationDetails = async (req, res) => {
+    try {
+        let towerMonitoringUserDetails = req.body;
+
+        let result = undefined;
+        let id = dal.uuid(db.towerMonitoringNotificationDetails.name);
+        let id2 = dal.uuid(db.towerMonitoringNotificationSubDetails.name);
+        db.sequelize.query('call asp_nk_save_tmc_user_out_of_range_notification(:p_EmployeeMasterId,:p_RoleMasterId,:p_TMCNotificationDetaiId,:p_TMCNotificationSubDetaiId)', {
+            replacements: {
+                p_EmployeeMasterId: towerMonitoringUserDetails.employeeMasterId ? towerMonitoringUserDetails.employeeMasterId : '',
+                p_RoleMasterId: towerMonitoringUserDetails.roleMasterId ? towerMonitoringUserDetails.roleMasterId : '',
+                p_TMCNotificationDetaiId: id,
+                p_TMCNotificationSubDetaiId: id2,
+            }
+        }).then(results => {
+            result = results;
+            responseHelper.success(res, codes.SUCCESS, result, 'TMC User Out Of Range Notification Details saved successfully !!', id);
+        }).catch(error => {
+            responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC User Out Of Range Notification details !!');
+        })
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving TMC User Out Of Range Notification Details  !!');
+    }
+}
+
+
+const updateTMCUserFCMDetails = async (req, res) => {
+    try {
+        let towerMonitoringUserDetails = req.body;
+
+        let result = undefined;
+        if (util.missingRequiredFields('towerMonitoringUserDetails', towerMonitoringUserDetails, res) === '') {
+
+            db.sequelize.query('call asp_nk_update_tmc_user_fcm_details(:p_EmployeeMasterId,:p_RoleMasterId,:p_ReceiverId)', {
+                replacements: {
+                    p_EmployeeMasterId: towerMonitoringUserDetails.employeeMasterId ? towerMonitoringUserDetails.employeeMasterId : '',
+                    p_RoleMasterId: towerMonitoringUserDetails.roleMasterId ? towerMonitoringUserDetails.roleMasterId : '',
+                    p_ReceiverId: towerMonitoringUserDetails.receiverId ? towerMonitoringUserDetails.receiverId : '',
+                }
+            }).then(results => {
+                result = results;
+                responseHelper.success(res, codes.SUCCESS, result, 'TMC User FCM Details saved successfully !!', id);
+            }).catch(error => {
+                responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC User FCM Details !!');
+            })
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving TMC User FCM Details  !!');
+    }
+}
 //#endregion
 
 
@@ -607,3 +661,5 @@ module.exports.outTMCAndRiggerDetails = outTMCAndRiggerDetails;
 module.exports.getTMCDataByEmployeeAndRoleMasterId = getTMCDataByEmployeeAndRoleMasterId;
 module.exports.saveTMCUserDetails = saveTMCUserDetails;
 
+module.exports.saveTMCUserOutOfRangeNotificationDetails = saveTMCUserOutOfRangeNotificationDetails;
+module.exports.updateTMCUserFCMDetails = updateTMCUserFCMDetails;

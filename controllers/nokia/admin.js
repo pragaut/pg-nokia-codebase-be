@@ -229,10 +229,11 @@ const getTowerMaster = async (req, res) => {
             return getTowerMasterById(req, res);
         }
         else {
-            db.sequelize.query('call asp_nk_cm_tower_get_tower_details(:p_tower_id)',
+            db.sequelize.query('call asp_nk_cm_tower_get_tower_details(:p_tower_id,:p_OnlyWIPTowerVisible)',
                 {
                     replacements: {
-                        p_tower_id: req.query.id ? req.query.id : ''
+                        p_tower_id: req.query.id ? req.query.id : '',
+                        p_OnlyWIPTowerVisible:0
                     }
                 }).then(results => {
                     responseHelper.success(res, 200, results, 'Tower Details List got successfully', '-1', results.length);

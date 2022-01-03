@@ -621,7 +621,7 @@ const updateTMCUserFCMDetails = async (req, res) => {
                 }
             }).then(results => {
                 result = results;
-                responseHelper.success(res, codes.SUCCESS, result, 'TMC User FCM Details saved successfully !!', id);
+                responseHelper.success(res, codes.SUCCESS, result, 'TMC User FCM Details saved successfully !!', '-1');
             }).catch(error => {
                 responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC User FCM Details !!');
             })

@@ -29,7 +29,7 @@ const saveTMCDetailsP = async (req, res) => {
                     p_clamp_status: tmcData.clampStatus ? tmcData.clampStatus : '',
                     p_is_clamp1_connected: tmcData.isClamp1Connected,
                     p_clamp1_status: tmcData.clamp1Status ? tmcData.clamp1Status : '',
-                    p_is_clamp2_connected:  tmcData.isClamp2Connected,
+                    p_is_clamp2_connected: tmcData.isClamp2Connected,
                     p_clamp2_status: tmcData.clamp2Status ? tmcData.clamp2Status : '',
                     p_sea_level_height: tmcData.seaLevelheight ? tmcData.seaLevelheight : 0,
                     p_main_device_battery: tmcData.mainDeviceBattery ? tmcData.mainDeviceBattery : '',
@@ -156,11 +156,13 @@ const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
 //#region  Device mapping details
 const getTMCDeviceMappingDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_device_mapping_get_device_mapping_details(:p_device_registration_detail_id, :p_tower_id)',
+        db.sequelize.query('call asp_nk_device_mapping_get_device_mapping_details(:p_device_registration_detail_id, :p_tower_id,:p_OrgDetailsId,:p_RoleMasterId)',
             {
                 replacements: {
                     p_device_registration_detail_id: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
                     p_tower_id: req.query.towerId ? req.query.towerId : '',
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'device mapping details get successfully', '-1', results.length);
@@ -178,13 +180,15 @@ const getTMCDeviceMappingDetails = async (req, res) => {
 
 const getTMCTowerNotificationDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed)',
+        db.sequelize.query('call asp_nk_tower_notification_get_tower_notification_details(:p_tower_monitoring_detail_id, :p_alarm_type_id, :p_device_registration_detail_id, :p_is_Closed,:p_OrgDetailsId,:p_RoleMasterId)',
             {
                 replacements: {
                     p_tower_monitoring_detail_id: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
                     p_alarm_type_id: req.query.alarmTypeId ? req.query.alarmTypeId : '',
                     p_device_registration_detail_id: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
-                    p_is_Closed: req.query.isClosed ? req.query.isClosed : null
+                    p_is_Closed: req.query.isClosed ? req.query.isClosed : null,
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'tower notification details get successfully', '-1', results.length);
@@ -204,7 +208,7 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
         if (req.user && req.user.id !== null)
             UserId = req.user.id;
-        let StatusUpdatedOn = new Date(); 
+        let StatusUpdatedOn = new Date();
         let towerNotificationDetails = {
             id: TowerNotificationDetails.id,
             remarks: TowerNotificationDetails.remarks,
@@ -231,13 +235,15 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 
 //#region Get Tower Active Status Details
 
-const getTMCTowerActiveStatusDetails = async(req, res) => {
-    console.log("getTMCTowerActiveStatusDetails : >>>>","AA Gaya");
+const getTMCTowerActiveStatusDetails = async (req, res) => {
+   // console.log("getTMCTowerActiveStatusDetails : >>>>", "AA Gaya");
     try {
-        db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_tower_id)',
+        db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_TowerId,:p_OrgDetailsId,:p_RoleMasterId)',
             {
                 replacements: {
-                    p_tower_id: req.query.towerId ? req.query.towerId : ''
+                    p_TowerId: req.query.towerId ? req.query.towerId : '',
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'tower active status get successfully', '-1', results.length);
@@ -287,7 +293,12 @@ const getDeviceBatteryStatusLog = async (req, res) => {
 };
 const getTowerMonitoringDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_FromDate,:p_ToDate)',
+        let currentDate = new Date();
+        // console.log('currentDate ------- ', currentDate);
+        // let NewDate = util.dateAdd(currentDate, 'minute', 330);
+        //console.log('NewDate ------- ', NewDate);
+
+        db.sequelize.query('call asp_nk_tower_monitoring_details_get_tower_monitoring_details(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_RiggerEmployeeId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_IsOnlyLiveTMCDataRequired,:p_FromDate,:p_ToDate,:p_OrgDetailsId,:p_RoleMasterId)',
             {
                 replacements: {
                     p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
@@ -297,8 +308,11 @@ const getTowerMonitoringDetails = async (req, res) => {
                     p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
                     p_UniqueId: req.query.uniqueId ? req.query.uniqueId : '',
                     p_IsOnlyTodayDataRequired: req.query.isOnlyTodayDataRequired ? req.query.isOnlyTodayDataRequired : '0',
+                    p_IsOnlyLiveTMCDataRequired: req.query.isOnlyLiveTMCDataRequired ? req.query.isOnlyLiveTMCDataRequired : '1',
                     p_FromDate: req.query.fromDate && req.query.fromDate !== 'undefined' ? req.query.fromDate : null,
                     p_ToDate: req.query.toDate && req.query.toDate !== 'undefined' ? req.query.toDate : null,
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
 
                 }
             }).then(results => {
@@ -314,12 +328,13 @@ const getTowerMonitoringDetails = async (req, res) => {
 };
 const getDeviceStatusDetails = async (req, res) => {
     try {
-        db.sequelize.query('call asp_nk_device_status_details_get_device_status_details(:p_DeviceStatusDetailId, :p_DeviceRegistrationDetailId, :p_MacAddress)',
+        db.sequelize.query('call asp_nk_device_status_details_get_device_status_details(:p_DeviceStatusDetailId, :p_DeviceRegistrationDetailId, :p_MacAddress,:p_TowerMonitoringDetailId)',
             {
                 replacements: {
                     p_DeviceStatusDetailId: req.query.deviceStatusDetailId ? req.query.deviceStatusDetailId : '',
                     p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
                     p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
+                    p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'device status details get successfully', '-1', results.length);
@@ -380,7 +395,276 @@ const getTowerMonitoringSubDetails = async (req, res) => {
 //#endregion
 
 
+//#region  API For Mobile Application
 
+const getEmployeeTMCWorkingStatus = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_employee_tmc_working_status(:p_EmployeeMasterId, :p_Type)',
+            {
+                replacements: {
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
+                    p_Type: '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'employee status get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting employee status details');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'employee status details');
+    }
+};
+
+
+const getTowerDetailsByOrgDetailsId = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_towerdetails_by_org_details_id_or_employee_id(:p_OrgDetailsId, :p_EmployeeMasterId)',
+            {
+                replacements: {
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower master details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower master');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'tower master details');
+    }
+};
+
+
+const getDeviceDetailsByOrgDetailsId = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_device_details_by_employee_id_or_org_details_id(:p_OrgDetailsId, :p_EmployeeMasterId)',
+            {
+                replacements: {
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'device master details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting device master');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'device master details');
+    }
+};
+
+
+const saveTMCAndRiggerDetails = async (req, res) => {
+    try {
+        let towerMonitoringDetails = req.body;
+
+        if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
+            let result = undefined;
+            let id = dal.uuid(db.towerMonitoringDetails.name);
+
+            db.sequelize.query('call asp_nk_save_tmc_and_rigger_details(:p_TowerMonitoringDetailsId,:p_TowerId,:p_DeviceRegistrationDetailsId,:p_EmployeeMasterId,:p_YearId)', {
+                replacements: {
+                    p_TowerMonitoringDetailsId: id,
+                    p_TowerId: towerMonitoringDetails.towerId ? towerMonitoringDetails.towerId : '',
+                    p_DeviceRegistrationDetailsId: towerMonitoringDetails.deviceRegistrationDetailsId ? towerMonitoringDetails.deviceRegistrationDetailsId : '',
+                    p_EmployeeMasterId: towerMonitoringDetails.employeeMasterId ? towerMonitoringDetails.employeeMasterId : '',
+                    p_YearId: towerMonitoringDetails.yearId ? towerMonitoringDetails.yearId : '',
+                }
+            }).then(results => {
+                result = results;
+                responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger details saved successfully !!', id);
+            }).catch(error => {
+                responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC and rigger details !!');
+            })
+        }
+        else {
+            responseHelper.error(res, 'some field missing', codes.ERROR, 'Error in saving TMC and rigger details !!');
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving TMC and rigger details !!');
+    }
+}
+
+const outTMCAndRiggerDetails = async (req, res) => {
+    try {
+        let towerMonitoringDetails = req.body;
+        let currentDate = new Date();
+        console.log('currentDate ------- ', currentDate);
+        let NewDate = util.dateAdd(currentDate, 'minute', 330);
+        console.log('NewDate ------- ', NewDate);
+        let dataforsubmit = {
+            id: towerMonitoringDetails.towerMonitoringDetailId,
+            endDateTime: NewDate
+        }
+        let userId = req.query.userId ? req.query.userId : '-1';
+        let result = undefined;
+        if (util.missingRequiredFields('towerMonitoringDetails', towerMonitoringDetails, res) === '') {
+            result = await dal.saveData(db.towerMonitoringDetails, dataforsubmit, undefined, userId);
+        }
+        if (result) {
+            responseHelper.success(res, codes.SUCCESS, result, 'TMC and rigger out details saved successfully !!', '-1');
+        }
+        else {
+            responseHelper.error(res, result, codes.ERROR, 'Error in out TMC and rigger details !!');
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in out TMC and rigger details !!');
+    }
+}
+
+const getTMCDataByEmployeeAndRoleMasterId = async (req, res) => {
+    try {
+        db.sequelize.query('call asp_nk_get_tmc_details_by_employee_and_role_id(:p_TowerMonitoringDetailId, :p_TowerMasterId, :p_EmployeeMasterId,:p_RoleMasterId,:p_DeviceRegistrationDetailId,:p_MacAddress, :p_UniqueId,:p_IsOnlyTodayDataRequired,:p_IsOnlyLiveTMCDataRequired,:p_FromDate,:p_ToDate,:p_OrgDetailsId)',
+            {
+                replacements: {
+                    p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
+                    p_TowerMasterId: req.query.towerMasterId ? req.query.towerMasterId : '',
+                    p_EmployeeMasterId: req.query.employeeMasterId ? req.query.employeeMasterId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
+                    p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
+                    p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
+                    p_UniqueId: req.query.uniqueId ? req.query.uniqueId : '',
+                    p_IsOnlyTodayDataRequired: req.query.isOnlyTodayDataRequired ? req.query.isOnlyTodayDataRequired : '0',
+                    p_IsOnlyLiveTMCDataRequired: req.query.isOnlyLiveTMCDataRequired ? req.query.isOnlyLiveTMCDataRequired : '1',
+                    p_FromDate: req.query.fromDate && req.query.fromDate !== 'undefined' ? req.query.fromDate : null,
+                    p_ToDate: req.query.toDate && req.query.toDate !== 'undefined' ? req.query.toDate : null,
+                    p_OrgDetailsId : req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower monitoring details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower monitoring details');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower monitoring details');
+    }
+};
+const _FindTMCUserAlreadyExistOrNot = async (id, towerMonitoringDetailId, employeeId) => {
+    let where = [];
+    if (id && id !== null && id !== 'undefined') {
+        where.push(util.constructWheresForNotEqualSequelize('id', id));
+    }
+    where.push(util.constructWheresForSequelize('isActive', 1));
+    where.push(util.constructWheresForSequelize('towerMonitoringDetailId', towerMonitoringDetailId));
+    where.push(util.constructWheresForSequelize('employeeId', employeeId));
+
+    const towerMonitoringUserDetails = await dal.getList({ model: db.towerMonitoringUserDetails, where, order: [['createdAt', 'desc']], include: false, });
+    if (towerMonitoringUserDetails && towerMonitoringUserDetails.length > 0) {
+        return 'already exist'
+    }
+    else {
+        return 'success'
+    }
+}
+
+
+const saveTMCUserDetails = async (req, res) => {
+    try {
+        let towerMonitoringUserDetails = req.body;
+        let userId = req.query.userId ? req.query.userId : '-1';
+        let result = undefined;
+        const PKID = towerMonitoringUserDetails && towerMonitoringUserDetails.id ? towerMonitoringUserDetails.id : undefined;
+        const ChekAlreadyExist = await _FindTMCUserAlreadyExistOrNot(PKID, towerMonitoringUserDetails.towerMonitoringDetailId, towerMonitoringUserDetails.employeeId);
+        let CodeMsg = 'this user already exist for this TMC';
+        if (ChekAlreadyExist && ChekAlreadyExist !== "success") throw util.generateWarning(CodeMsg, codes.CODE_ALREADY_EXISTS);
+
+        if (util.missingRequiredFields('towerMonitoringUserDetails', towerMonitoringUserDetails, res) === '') {
+            result = await dal.saveData(db.towerMonitoringUserDetails, towerMonitoringUserDetails, undefined, userId);
+        }
+        if (result) {
+            responseHelper.success(res, codes.SUCCESS, result, 'TMC user details saved successfully !!', '-1');
+        }
+        else {
+            responseHelper.error(res, result, codes.ERROR, 'Error in saving TMS user details !!');
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving  TMC  user details !!');
+    }
+}
+
+
+const saveTMCUserOutOfRangeNotificationDetails = async (req, res) => {
+    try {
+        let towerMonitoringUserDetails = req.body;
+
+        let result = undefined;
+        let id = dal.uuid(db.towerMonitoringNotificationDetails.name);
+        let id2 = dal.uuid(db.towerMonitoringNotificationSubDetails.name);
+        db.sequelize.query('call asp_nk_save_tmc_user_out_of_range_notification(:p_EmployeeMasterId,:p_RoleMasterId,:p_TMCNotificationDetaiId,:p_TMCNotificationSubDetaiId)', {
+            replacements: {
+                p_EmployeeMasterId: towerMonitoringUserDetails.employeeMasterId ? towerMonitoringUserDetails.employeeMasterId : '',
+                p_RoleMasterId: towerMonitoringUserDetails.roleMasterId ? towerMonitoringUserDetails.roleMasterId : '',
+                p_TMCNotificationDetaiId: id,
+                p_TMCNotificationSubDetaiId: id2,
+            }
+        }).then(results => {
+            result = results;
+            responseHelper.success(res, codes.SUCCESS, result, 'TMC User Out Of Range Notification Details saved successfully !!', id);
+        }).catch(error => {
+            responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC User Out Of Range Notification details !!');
+        })
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving TMC User Out Of Range Notification Details  !!');
+    }
+}
+
+
+const updateTMCUserFCMDetails = async (req, res) => {
+    try {
+        let towerMonitoringUserDetails = req.body;
+
+        let result = undefined;
+        if (util.missingRequiredFields('towerMonitoringUserDetails', towerMonitoringUserDetails, res) === '') {
+
+            db.sequelize.query('call asp_nk_update_tmc_user_fcm_details(:p_EmployeeMasterId,:p_RoleMasterId,:p_ReceiverId)', {
+                replacements: {
+                    p_EmployeeMasterId: towerMonitoringUserDetails.employeeMasterId ? towerMonitoringUserDetails.employeeMasterId : '',
+                    p_RoleMasterId: towerMonitoringUserDetails.roleMasterId ? towerMonitoringUserDetails.roleMasterId : '',
+                    p_ReceiverId: towerMonitoringUserDetails.receiverId ? towerMonitoringUserDetails.receiverId : '',
+                }
+            }).then(results => {
+                result = results;
+                responseHelper.success(res, codes.SUCCESS, result, 'TMC User FCM Details saved successfully !!', '-1');
+            }).catch(error => {
+                responseHelper.error(res, error, codes.ERROR, 'Error in saving TMC User FCM Details !!');
+            })
+        }
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in saving TMC User FCM Details  !!');
+    }
+}
+
+
+const getActiveTowerDetails = async (req, res) => {
+    try {
+        let where = [];
+        db.sequelize.query('call asp_nk_cm_tower_get_tower_details(:p_tower_id,:p_OnlyWIPTowerVisible)',
+            {
+                replacements: {
+                    p_tower_id: req.query.id ? req.query.id : '',
+                    p_OnlyWIPTowerVisible: 1
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'Tower Details List got successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in Tower Details');
+
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting Tower details');
+    }
+};
+//#endregion
 
 
 module.exports.saveTMCDetailsP = saveTMCDetailsP;
@@ -402,3 +686,14 @@ module.exports.updateTMCTowerNotificationDetails = updateTMCTowerNotificationDet
 module.exports.getTMCTowerActiveStatusDetails = getTMCTowerActiveStatusDetails;
 
 module.exports.getDeviceBatteryStatusLog = getDeviceBatteryStatusLog;
+module.exports.getEmployeeTMCWorkingStatus = getEmployeeTMCWorkingStatus;
+module.exports.getTowerDetailsByOrgDetailsId = getTowerDetailsByOrgDetailsId;
+module.exports.getDeviceDetailsByOrgDetailsId = getDeviceDetailsByOrgDetailsId;
+module.exports.saveTMCAndRiggerDetails = saveTMCAndRiggerDetails;
+module.exports.outTMCAndRiggerDetails = outTMCAndRiggerDetails;
+module.exports.getTMCDataByEmployeeAndRoleMasterId = getTMCDataByEmployeeAndRoleMasterId;
+module.exports.saveTMCUserDetails = saveTMCUserDetails;
+
+module.exports.saveTMCUserOutOfRangeNotificationDetails = saveTMCUserOutOfRangeNotificationDetails;
+module.exports.updateTMCUserFCMDetails = updateTMCUserFCMDetails;
+module.exports.getActiveTowerDetails = getActiveTowerDetails;

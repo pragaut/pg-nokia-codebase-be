@@ -94,5 +94,21 @@ router.get('/towerActiveStatusDetails', (req, res) => workingTMC.getTMCTowerActi
 
 //#endregion ----------region TMC end--------------------///
 
+//#region  TMC API Login
+router.get('/employeeTMCWorkingStatus', (req, res) => workingTMC.getEmployeeTMCWorkingStatus(req, res));
+router.get('/towerDetailsByOrgDetailsId', (req, res) => workingTMC.getTowerDetailsByOrgDetailsId(req, res));
+router.get('/deviceDetailsByOrgDetailsId', (req, res) => workingTMC.getDeviceDetailsByOrgDetailsId(req, res));
+router.post('/saveTMCAndRiggerDetails', (req, res) => workingTMC.saveTMCAndRiggerDetails(req, res));
+router.post('/outTMCAndRiggerDetails', (req, res) => workingTMC.outTMCAndRiggerDetails(req, res));
+router.get('/getTMCDataByEmployeeAndRoleMasterId', (req, res) => workingTMC.getTMCDataByEmployeeAndRoleMasterId(req, res));
+
+router.post('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(req, res));
+router.put('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(req, res));
+
+router.post('/saveTMCUserOutOfRangeNotificationDetails', (req, res) => workingTMC.saveTMCUserOutOfRangeNotificationDetails(req, res));
+router.post('/updateTMCUserFCMDetails', (req, res) => workingTMC.updateTMCUserFCMDetails(req, res));
+router.get('/getActiveTowerDetails', (req, res) => workingTMC.getActiveTowerDetails(req, res));
+
+//#endregion
 
 module.exports = router;

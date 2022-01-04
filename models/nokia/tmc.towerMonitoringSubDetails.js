@@ -5,6 +5,10 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true,
             field: 'tower_monitoring_sub_detail_id'
         },
+        macAddress: {
+            type: DataTypes.STRING,
+            field: 'mac_address'
+        },
         towerMonitoringDetailId: {
             type: DataTypes.STRING,
             field: 'tower_monitoring_detail_id'

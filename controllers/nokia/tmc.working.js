@@ -151,6 +151,8 @@ const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     }
 }
 
+
+
 //#region  Device mapping details
 const getTMCDeviceMappingDetails = async (req, res) => {
     try {

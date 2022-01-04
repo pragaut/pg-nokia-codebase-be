@@ -94,6 +94,9 @@ const config = {
 		},
 		'nokiaworking-devicelocationdetails' : {
 			all: true
+		},
+		'nokiaworking-emergencyalaramdetails' : {
+			all: true
 		}
 		// 'chimpmail-update-mailchimp': {
 		// 	all: true

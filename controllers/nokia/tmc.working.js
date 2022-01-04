@@ -135,8 +135,9 @@ const saveTMCDeviceLocationDetails = async (req, res) => {
 
 const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     try {
-        let deviceNetworkConnectivityStatusDetails = req.body;
+        let deviceNetworkConnectivityStatusDetails = req.body ? req.body : undefined;
         console.log("deviceNetworkConnectivityStatusDetails : ", deviceNetworkConnectivityStatusDetails);
+
         if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {
             const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined.req.user.id);
             if (result) {

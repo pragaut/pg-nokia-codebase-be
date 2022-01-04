@@ -44,12 +44,12 @@ router.post('/mediaDetails/multiplefiles', (req, res) => working.saveMultipleMed
 //#region TMC Device Battery Details
 
 router.post('/tmcDetails', (req, res) => workingTMC.saveTMCDetailsP(req, res));
-router.post('/tmcDetails', (req, res) => workingTMC.saveTMCDetailsP(req, res));
+router.put('/tmcDetails', (req, res) => workingTMC.saveTMCDetailsP(req, res));
 
 router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
-router.post('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
+router.put('/deviceBatteryDetails', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetails(req, res));
 router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetailsP(req, res));
-router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetailsP(req, res));
+router.put('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBetteryStatusDetailsP(req, res));
 
 //router.get('/deviceBatteryDetails', (req, res) => workingTMC.getAntennaRotataionDetails(req, res));
 //router.put('/deviceBatteryDetails', (req, res) => workingTMC.saveAntennaRotationDetails(req, res));
@@ -59,14 +59,14 @@ router.post('/deviceBatteryDetailsP', (req, res) => workingTMC.saveTMCDeviceBett
 //#region TMC Device Location Details
 
 router.post('/deviceLocationDetails', (req, res) => workingTMC.saveTMCDeviceLocationDetails(req, res));
-router.post('/deviceLocationDetails', (req, res) => workingTMC.saveTMCDeviceLocationDetails(req, res));
+router.put('/deviceLocationDetails', (req, res) => workingTMC.saveTMCDeviceLocationDetails(req, res));
 
 //#endregion
 
 //#region TMC Device Network Connectivity Status Details
 
 router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.saveTMCDeviceNetworkConnectivityStatusDetails(req, res));
-router.post('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.saveTMCDeviceNetworkConnectivityStatusDetails(req, res));
+router.put('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.saveTMCDeviceNetworkConnectivityStatusDetails(req, res));
 
 //#endregion
 

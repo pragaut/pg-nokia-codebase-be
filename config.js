@@ -88,6 +88,12 @@ const config = {
 		},
 		'nokiaworking-tmcdetails' : {
 			all: true
+		},
+		'nokiaworking-devicenetworkconnectivitystatusdetails' : {
+			all: true
+		},
+		'nokiaworking-devicelocationdetails' : {
+			all: true
 		}
 		// 'chimpmail-update-mailchimp': {
 		// 	all: true

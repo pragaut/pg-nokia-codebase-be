@@ -303,15 +303,33 @@ const getTMCTowerActiveStatusDetails = async (req, res) => {
 
 //#region  Tower Monitoring Details 
 const getDeviceBatteryStatus = async (req, res) => {
+    // try {
+    //     let where = [];
+    //     where.push(util.constructWheresForSequelize('isActive', 1));
+    //     where.push(util.constructWheresForSequelize('macAddress', req.query.macAddress));
+    //     const result = await dal.getList({ model: db.deviceBatteryStatusDetails, where, order: [['createdAt', 'desc']], include: false, rowsToReturn: req.query.rows, pageIndex: req.query.pageIndex, undefined });
+    //     responseHelper.success(res, codes.SUCCESS, result, 'device battery status data', '-1', result.length);
+    // }
+    // catch (error) {
+    //     responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'device battery status details');
+    // }
     try {
-        let where = [];
-        where.push(util.constructWheresForSequelize('isActive', 1));
-        where.push(util.constructWheresForSequelize('macAddress', req.query.macAddress));
-        const result = await dal.getList({ model: db.deviceBatteryStatusDetails, where, order: [['createdAt', 'desc']], include: false, rowsToReturn: req.query.rows, pageIndex: req.query.pageIndex, undefined });
-        responseHelper.success(res, codes.SUCCESS, result, 'device battery status data', '-1', result.length);
+        db.sequelize.query('call asp_nk_get_battery_status_details(:p_TowerMonitoringDetailId, :p_DeviceRegistrationDetailId,:p_MacAddress)',
+            {
+                replacements: {
+                    p_TowerMonitoringDetailId: req.query.towerMonitoringDetailId ? req.query.towerMonitoringDetailId : '',
+                    p_DeviceRegistrationDetailId: req.query.deviceRegistrationDetailId ? req.query.deviceRegistrationDetailId : '',
+                    p_MacAddress: req.query.macAddress ? req.query.macAddress : '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'tower monitoring details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting tower monitoring details');
+
+            });
     }
     catch (error) {
-        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'device battery status details');
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'getting tower monitoring details');
     }
 };
 const getDeviceBatteryStatusLog = async (req, res) => {

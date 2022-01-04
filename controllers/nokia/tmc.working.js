@@ -13,7 +13,7 @@ const { json } = require('express');
 const saveTMCDetailsP = async (req, res) => {
     try {
         let tmcData = req.body;
-        console.log("tmc req data : ", tmcData);
+        //console.log("tmc req data : ", tmcData);
         if (util.missingRequiredFields('towerMonitoringDetails', tmcData, res) === '') {
             //const result = await dal.saveData(db.tmcData, tmcData, undefined.req.user.id);
 
@@ -136,10 +136,10 @@ const saveTMCDeviceLocationDetails = async (req, res) => {
 const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     try {
         let deviceNetworkConnectivityStatusDetails = req.body ? req.body : undefined;
-        console.log("deviceNetworkConnectivityStatusDetails : ", deviceNetworkConnectivityStatusDetails);
+       // console.log("deviceNetworkConnectivityStatusDetails : ", deviceNetworkConnectivityStatusDetails);
 
         if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {
-            const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined,req.body.userId);
+            const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined, req.body.userId);
             if (result) {
                 responseHelper.success(res, codes.success, result, 'Device network connctivity details saved successfully !!', result.id);
             }
@@ -153,6 +153,47 @@ const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     }
 }
 
+
+const saveTMCNotificationDetailsP = async (req, res) => {
+    try {
+        let tmcData = req.body;
+        console.log("tmc notification req data : ", tmcData);
+        if (util.missingRequiredFields('towerMonitoringDetails', tmcData, res) === '') {
+            //const result = await dal.saveData(db.tmcData, tmcData, undefined.req.user.id);
+
+            let result = undefined;
+            let towerMonitoringNotificationDetailid = dal.uuid(db.towerMonitoringNotificationDetails.name);
+
+            await db.sequelize.query('call asp_nk_save_tower_monitoring_notification_details(:p_tower_monitoring_notification_detail_id,:p_mac_address,:p_notification_code,:p_title,:p_message,:p_data_time,:p_created_by)', {
+                replacements: {
+                    p_tower_monitoring_notification_detail_id: towerMonitoringNotificationDetailid,
+                    p_mac_address: tmcData.macAddress ? tmcData.macAddress : '',
+                    p_notification_code: tmcData.notificationCode ? tmcData.notificationCode : '',
+                    p_title: tmcData.title ? tmcData.title : '',
+                    p_message: tmcData.message ? tmcData.message : '',
+                    p_data_time: tmcData.dataTime ? tmcData.dataTime : new Date(),
+                    p_created_by: tmcData.useId ? tmcData.useId : '',
+                }
+            }).then(results => {
+                console.log("saveTMCDetailsP results : ", results);
+                result = results;
+            }).catch(error => {
+                console.log("saveTMCDetailsP error : ", error);
+                result = error;
+            })
+            if (result) {
+                responseHelper.success(res, codes.success, result, 'Device battery details saved successfully !!', result.id);
+            }
+            else {
+                responseHelper.error(res, result, codes.ERROR, 'Error in Saving device battery details !!');
+            }
+        }
+    }
+    catch (error) {
+        console.log("saveTMCDetailsP error 2 : ", error);
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device battery details !!');
+    }
+}
 
 
 //#region  Device mapping details
@@ -716,6 +757,8 @@ module.exports.saveTMCDeviceBetteryStatusDetailsP = saveTMCDeviceBetteryStatusDe
 module.exports.saveTMCDeviceLocationDetails = saveTMCDeviceLocationDetails;
 
 module.exports.saveTMCDeviceNetworkConnectivityStatusDetails = saveTMCDeviceNetworkConnectivityStatusDetails;
+
+module.exports.saveTMCNotificationDetailsP = saveTMCNotificationDetailsP;
 
 module.exports.getDeviceBatteryStatus = getDeviceBatteryStatus;
 module.exports.getTowerMonitoringDetails = getTowerMonitoringDetails;

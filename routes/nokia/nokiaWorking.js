@@ -70,6 +70,13 @@ router.put('/deviceNetworkConnectivityStatusDetails', (req, res) => workingTMC.s
 
 //#endregion
 
+//#region TMC Device Network Connectivity Status Details
+
+router.post('/emergencyAlaramDetails', (req, res) => workingTMC.saveTMCNotificationDetailsP(req, res));
+router.put('/emergencyAlaramDetails', (req, res) => workingTMC.saveTMCNotificationDetailsP(req, res));
+
+//#endregion
+
 //#region TMC Tower Monitoring Details
 
 router.get('/deviceBatteryStatus', (req, res) => workingTMC.getDeviceBatteryStatus(req, res));

@@ -261,6 +261,28 @@ const getTMCTowerActiveStatusDetails = async (req, res) => {
 //#endregion
 
 //#region  Tower Monitoring Details 
+
+const getTMCDeviceLocationDetails = async (req, res) => {
+    // console.log("getTMCTowerActiveStatusDetails : >>>>", "AA Gaya");
+    try {
+        db.sequelize.query('call asp_nk_get_device_locattion_details(:p_OrgDetailsId,:p_RoleMasterId)',
+            {
+                replacements: { 
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
+                }
+            }).then(results => {
+                responseHelper.success(res, 200, results, 'device location details get successfully', '-1', results.length);
+            }).catch(err => {
+                responseHelper.error(res, err.code ? err.code : codes.ERROR, err, 'Error in getting device location details');
+            });
+    }
+    catch (error) {
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'device location details');
+    }
+};
+
+
 const getDeviceBatteryStatus = async (req, res) => {
     // try {
     //     let where = [];
@@ -717,3 +739,5 @@ module.exports.saveTMCUserDetails = saveTMCUserDetails;
 module.exports.saveTMCUserOutOfRangeNotificationDetails = saveTMCUserOutOfRangeNotificationDetails;
 module.exports.updateTMCUserFCMDetails = updateTMCUserFCMDetails;
 module.exports.getActiveTowerDetails = getActiveTowerDetails;
+
+module.exports.getTMCDeviceLocationDetails = getTMCDeviceLocationDetails;

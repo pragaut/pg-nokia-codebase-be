@@ -136,6 +136,7 @@ const saveTMCDeviceLocationDetails = async (req, res) => {
 const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     try {
         let deviceNetworkConnectivityStatusDetails = req.body;
+        console.log("deviceNetworkConnectivityStatusDetails : ", deviceNetworkConnectivityStatusDetails);
         if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {
             const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined.req.user.id);
             if (result) {
@@ -236,7 +237,7 @@ const updateTMCTowerNotificationDetails = async (req, res) => {
 //#region Get Tower Active Status Details
 
 const getTMCTowerActiveStatusDetails = async (req, res) => {
-   // console.log("getTMCTowerActiveStatusDetails : >>>>", "AA Gaya");
+    // console.log("getTMCTowerActiveStatusDetails : >>>>", "AA Gaya");
     try {
         db.sequelize.query('call asp_nk_tower_details_get_tower_status_details(:p_TowerId,:p_OrgDetailsId,:p_RoleMasterId)',
             {
@@ -533,7 +534,7 @@ const getTMCDataByEmployeeAndRoleMasterId = async (req, res) => {
                     p_IsOnlyLiveTMCDataRequired: req.query.isOnlyLiveTMCDataRequired ? req.query.isOnlyLiveTMCDataRequired : '1',
                     p_FromDate: req.query.fromDate && req.query.fromDate !== 'undefined' ? req.query.fromDate : null,
                     p_ToDate: req.query.toDate && req.query.toDate !== 'undefined' ? req.query.toDate : null,
-                    p_OrgDetailsId : req.query.orgDetailsId ? req.query.orgDetailsId : '',
+                    p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
                 }
             }).then(results => {
                 responseHelper.success(res, 200, results, 'tower monitoring details get successfully', '-1', results.length);

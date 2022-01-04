@@ -139,7 +139,7 @@ const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
         console.log("deviceNetworkConnectivityStatusDetails : ", deviceNetworkConnectivityStatusDetails);
 
         if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {
-            const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined,req.user.id);
+            const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined,req.body.userId);
             if (result) {
                 responseHelper.success(res, codes.success, result, 'Device network connctivity details saved successfully !!', result.id);
             }

@@ -115,6 +115,7 @@ router.put('/saveTMCUserDetails', (req, res) => workingTMC.saveTMCUserDetails(re
 router.post('/saveTMCUserOutOfRangeNotificationDetails', (req, res) => workingTMC.saveTMCUserOutOfRangeNotificationDetails(req, res));
 router.post('/updateTMCUserFCMDetails', (req, res) => workingTMC.updateTMCUserFCMDetails(req, res));
 router.get('/getActiveTowerDetails', (req, res) => workingTMC.getActiveTowerDetails(req, res));
+router.get('/getTMCDeviceLocationDetails', (req, res) => workingTMC.getTMCDeviceLocationDetails(req, res));
 
 //#endregion
 

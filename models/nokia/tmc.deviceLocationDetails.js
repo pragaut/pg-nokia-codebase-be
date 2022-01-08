@@ -21,8 +21,8 @@ module.exports = function ( sequelize, DataTypes){
             type : DataTypes.STRING,
             field : 'latitude'
         },
-        date :{
-            type : DataTypes.STRING,
+        dataTime :{
+            type : DataTypes.DATE,
             field : 'date'
         },
         isDeviceActive :{

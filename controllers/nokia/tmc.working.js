@@ -133,6 +133,45 @@ const saveTMCDeviceLocationDetails = async (req, res) => {
     }
 }
 
+const saveTMCDeviceLocationDetailsP = async (req, res) => {
+    try {
+        let tmcData = req.body;
+        console.log("tmc location req data : ", tmcData);
+        if (util.missingRequiredFields('towerMonitoringDetails', tmcData, res) === '') {
+
+            let result = undefined;
+            let deviceLocationDetailid = dal.uuid(db.deviceLocationDetails.name);
+
+            await db.sequelize.query('call asp_nk_save_tower_monitoring_notification_details(:p_device_location_detail_id,:p_mac_address,:p_longitude,:p_latitude,:p_data_time,:p_created_by)', {
+                replacements: {
+                    p_device_location_detail_id: deviceLocationDetailid,
+                    p_mac_address: tmcData.macAddress ? tmcData.macAddress : '',
+                    p_longitude: tmcData.longitude ? tmcData.longitude : '',
+                    p_latitude: tmcData.latitude ? tmcData.latitude : '',
+                    p_data_time: tmcData.dataTime ? tmcData.dataTime : new Date(),
+                    p_created_by: tmcData.useId ? tmcData.useId : '',
+                }
+            }).then(results => {
+                console.log("saveTMCDetailsP results : ", results);
+                result = results;
+            }).catch(error => {
+                console.log("saveTMCDetailsP error : ", error);
+                result = error;
+            })
+            if (result) {
+                responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', result.id);
+            }
+            else {
+                responseHelper.error(res, result, codes.ERROR, 'Error in Saving device location details !!');
+            }
+        }
+    }
+    catch (error) {
+        console.log("saveTMCDetailsP error 2 : ", error);
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device battery details !!');
+    }
+}
+
 const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     try {
         let deviceNetworkConnectivityStatusDetails = req.body ? req.body : undefined;
@@ -182,16 +221,16 @@ const saveTMCNotificationDetailsP = async (req, res) => {
                 result = error;
             })
             if (result) {
-                responseHelper.success(res, codes.success, result, 'Device battery details saved successfully !!', result.id);
+                responseHelper.success(res, codes.success, result, 'Notification details saved successfully !!', result.id);
             }
             else {
-                responseHelper.error(res, result, codes.ERROR, 'Error in Saving device battery details !!');
+                responseHelper.error(res, result, codes.ERROR, 'Error in Saving device notification details !!');
             }
         }
     }
     catch (error) {
         console.log("saveTMCDetailsP error 2 : ", error);
-        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device battery details !!');
+        responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device notification details !!');
     }
 }
 

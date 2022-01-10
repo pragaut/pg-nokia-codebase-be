@@ -10,14 +10,13 @@ const entry = async (req, res, next) => {
         // let's get the auth url
         let originalUrl = req.originalUrl;
         const url = process.env.AUTH_URL + (originalUrl.slice(11, originalUrl.length));
-	//const url = process.env.AUTH_URL + originalUrl;
-
-         console.log("req originalUrl",req.originalUrl);
-        console.log("req.headers",req.headers);
+        //const url = process.env.AUTH_URL + originalUrl; 
+        // console.log("req originalUrl",req.originalUrl);
+        // console.log("req.headers",req.headers);
 
         let response = {};
 
-        
+
         switch (req.method) {
             case 'GET':
                 response = await fetch.get(url, {
@@ -60,7 +59,7 @@ const entry = async (req, res, next) => {
         }
 
         if (response.code === 200) {
-	    console.log("we got the successful result, the access is good");
+            console.log("we got the successful result, the access is good");
             // we got the successful result, the access is good
             if (response.data.user) {
                 req.user = response.data.user;
@@ -68,13 +67,13 @@ const entry = async (req, res, next) => {
             next();
         }
         else {
-            console.log("we got the unsuccessful result, the access is good",response.error);
+            console.log("we got the unsuccessful result, the access is good", response.error);
             // error
             throw response.error;
         }
     }
     catch (error) {
-        console.log("we got the unsuccessful result, the access is good 2",error);  
+        console.log("we got the unsuccessful result, the access is good 2", error);
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR);
     }
 };

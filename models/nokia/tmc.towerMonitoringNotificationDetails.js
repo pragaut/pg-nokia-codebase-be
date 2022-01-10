@@ -5,9 +5,9 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true,
             field: 'tower_monitoring_notification_detail_id'
         },
-        towerMonitoringSubDetailId: {
+        towerMonitoringDetailId: {
             type: DataTypes.STRING,
-            field: 'tower_monitoring_sub_detail_id'
+            field: 'tower_monitoring_detail_id'
         },
         deviceRegistrationDetailId: {
             type: DataTypes.STRING,

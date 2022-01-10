@@ -7,6 +7,7 @@ const config = require('../../config').config;
 const encryptionHelper = require('../../util/encryption.helper');
 const codes = require('../../util/codes').codes;
 const emailService = require('../../util/email');
+const firebase = require("../../../nokia/api/firebase");
 const { json } = require('express');
 
 
@@ -39,8 +40,12 @@ const saveTMCDetailsP = async (req, res) => {
                     p_dataTime: tmcData.dataTime ? tmcData.dataTime : new Date(),
                     p_created_by: tmcData.useId ? tmcData.useId : '',
                 }
-            }).then(results => {
+            }).then(async results => {
                 console.log("saveTMCDetailsP results : ", results);
+                const resultout = results && results.length > 0 && results[0].return_value;
+                if (result !== "success") {
+                    let notificationstatus = await sendFCMNoticationToUser(resultout, tmcData.macAddress,undefined,undefined,undefined)
+                }
                 result = results;
             }).catch(error => {
                 console.log("saveTMCDetailsP error : ", error);
@@ -175,7 +180,7 @@ const saveTMCDeviceLocationDetailsP = async (req, res) => {
 const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     try {
         let deviceNetworkConnectivityStatusDetails = req.body ? req.body : undefined;
-       // console.log("deviceNetworkConnectivityStatusDetails : ", deviceNetworkConnectivityStatusDetails);
+        // console.log("deviceNetworkConnectivityStatusDetails : ", deviceNetworkConnectivityStatusDetails);
 
         if (util.missingRequiredFields('deviceNetworkConnectivityStatusDetails', deviceNetworkConnectivityStatusDetails, res) === '') {
             const result = await dal.saveData(db.deviceNetworkConnectivityStatusDetails, deviceNetworkConnectivityStatusDetails, undefined, req.body.userId);
@@ -192,6 +197,43 @@ const saveTMCDeviceNetworkConnectivityStatusDetails = async (req, res) => {
     }
 }
 
+const sendFCMNoticationToUser = async (towerMonitoringNotificationDetailid, macAddress, notificationCode, message, title) => {
+    try {
+        console.log("-----------sendFCMNoticationToUser-----------", towerMonitoringNotificationDetailid);
+        await db.sequelize.query('call asp_nk_get_tmc_fcm_user_details(:p_TowerMonitoringNotificationDetailId,:p_TowerMonitoringDetailId,:p_DeviceRegistrationDetailId,:p_MacAddress,:p_UniqueId,:p_NotificationCode)', {
+            replacements: {
+                p_TowerMonitoringNotificationDetailId: towerMonitoringNotificationDetailid,
+                p_TowerMonitoringDetailId: '',
+                p_DeviceRegistrationDetailId: '',
+                p_MacAddress: macAddress,
+                p_UniqueId: '',
+                p_NotificationCode: '',
+            }
+        }).then(async results => {
+            let tokens = [];
+            let Message = "";
+            results && results.length > 0 && results.forEach(element => {
+                tokens.push(element.receiverId);
+                if (!title || title === null || title === '') {
+                    title = element.title;
+                    message = element.message;
+                }
+                //   firebase.sendMessageToDevice(element.receiverId, title, message);
+            });
+            console.log("-----------tokens-----------", tokens);
+            if (tokens && tokens.length > 0) {
+                await firebase.sendMessageToDevice(tokens, title, message);
+            }
+            return tokens;
+        }).catch(error => {
+
+            return error;
+        })
+    }
+    catch (error) {
+        return 'error'
+    }
+}
 
 const saveTMCNotificationDetailsP = async (req, res) => {
     try {
@@ -213,8 +255,9 @@ const saveTMCNotificationDetailsP = async (req, res) => {
                     p_data_time: tmcData.dataTime ? tmcData.dataTime : new Date(),
                     p_created_by: tmcData.useId ? tmcData.useId : '',
                 }
-            }).then(results => {
+            }).then(async results => {
                 console.log("saveTMCDetailsP results : ", results);
+                const notificatioresult = await sendFCMNoticationToUser(towerMonitoringNotificationDetailid, tmcData.macAddress, tmcData.notificationCode ? tmcData.notificationCode : '', tmcData.message ? tmcData.message : '', tmcData.title ? tmcData.title : '')
                 result = results;
             }).catch(error => {
                 console.log("saveTMCDetailsP error : ", error);
@@ -347,7 +390,7 @@ const getTMCDeviceLocationDetails = async (req, res) => {
     try {
         db.sequelize.query('call asp_nk_get_device_locattion_details(:p_OrgDetailsId,:p_RoleMasterId)',
             {
-                replacements: { 
+                replacements: {
                     p_OrgDetailsId: req.query.orgDetailsId ? req.query.orgDetailsId : '',
                     p_RoleMasterId: req.query.roleMasterId ? req.query.roleMasterId : '',
                 }
@@ -615,12 +658,9 @@ const outTMCAndRiggerDetails = async (req, res) => {
     try {
         let towerMonitoringDetails = req.body;
         let currentDate = new Date();
-        console.log('currentDate ------- ', currentDate);
-        let NewDate = util.dateAdd(currentDate, 'minute', 330);
-        console.log('NewDate ------- ', NewDate);
         let dataforsubmit = {
             id: towerMonitoringDetails.towerMonitoringDetailId,
-            endDateTime: NewDate
+            endDateTime: currentDate
         }
         let userId = req.query.userId ? req.query.userId : '-1';
         let result = undefined;
@@ -690,6 +730,7 @@ const saveTMCUserDetails = async (req, res) => {
     try {
         let towerMonitoringUserDetails = req.body;
         let userId = req.query.userId ? req.query.userId : '-1';
+        let receiverId = towerMonitoringUserDetails && towerMonitoringUserDetails.receiverId && towerMonitoringUserDetails.receiverId;
         let result = undefined;
         const PKID = towerMonitoringUserDetails && towerMonitoringUserDetails.id ? towerMonitoringUserDetails.id : undefined;
         const ChekAlreadyExist = await _FindTMCUserAlreadyExistOrNot(PKID, towerMonitoringUserDetails.towerMonitoringDetailId, towerMonitoringUserDetails.employeeId);
@@ -698,6 +739,9 @@ const saveTMCUserDetails = async (req, res) => {
 
         if (util.missingRequiredFields('towerMonitoringUserDetails', towerMonitoringUserDetails, res) === '') {
             result = await dal.saveData(db.towerMonitoringUserDetails, towerMonitoringUserDetails, undefined, userId);
+            if (result && receiverId) {
+                const r1 = await firebase.registerToken(receiverId, 'all');
+            }
         }
         if (result) {
             responseHelper.success(res, codes.SUCCESS, result, 'TMC user details saved successfully !!', '-1');

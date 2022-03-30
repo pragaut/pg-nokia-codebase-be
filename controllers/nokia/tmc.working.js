@@ -44,7 +44,7 @@ const saveTMCDetailsP = async (req, res) => {
                 console.log("saveTMCDetailsP results : ", results);
                 const resultout = results && results.length > 0 && results[0].return_value;
                 if (result !== "success") {
-                    let notificationstatus = await sendFCMNoticationToUser(resultout, tmcData.macAddress,undefined,undefined,undefined)
+                    let notificationstatus = await sendFCMNoticationToUser(resultout, tmcData.macAddress, undefined, undefined, undefined)
                 }
                 result = results;
             }).catch(error => {
@@ -120,14 +120,64 @@ const saveTMCDeviceBetteryStatusDetailsP = async (req, res) => {
     }
 }
 
+
+const getDeviceRegistrationMaster = async (macAddress) => {
+    try {
+        let where = [];
+        where.push(util.constructWheresForSequelize('isActive', 1));
+        where.push(util.constructWheresForSequelize('macAddress', macAddress));
+
+        console.log("macAddress ----", macAddress)
+        const result = await dal.getList({ model: db.deviceRegistrationMaster, where, order: [['createdAt', 'desc']], include: false });
+        console.log("result", result);
+        return result[0].id;
+    }
+    catch (error) {
+        console.log("Error ----", error);
+        return "fail";
+    }
+};
+
+
+const getExistingDeviceLocationDetailsID = async (deviceRegistrationDetailId) => {
+    try {
+        let where = [];
+        where.push(util.constructWheresForSequelize('isActive', 1));
+        where.push(util.constructWheresForSequelize('deviceRegistrationDetailId', deviceRegistrationDetailId));
+
+        console.log("deviceRegistrationDetailId ----", deviceRegistrationDetailId)
+        const result = await dal.getList({ model: db.deviceLocationDetails, where, order: [['createdAt', 'desc']], include: false });
+        console.log("result", result);
+        return result[0].id;
+    }
+    catch (error) {
+        console.log("Error ----", error);
+        return undefined;
+    }
+};
+
+
+
 const saveTMCDeviceLocationDetails = async (req, res) => {
     try {
         let deviceLocationDetails = req.body;
-        console.log("saveTMCDeviceLocationDetails ----------------------------- ",req.body)
+        deviceLocationDetails.deviceRegistrationDetailId = "";
+        deviceLocationDetails.isDeviceActive = true;
+
+        console.log("saveTMCDeviceLocationDetails ----------------------------- ", req.body)
+        const DeviceRegistartionID = await getDeviceRegistrationMaster(deviceLocationDetails && deviceLocationDetails.macAddress);
+        const pkID = await getExistingDeviceLocationDetailsID(DeviceRegistartionID);
+       console.log('-----------pkID-----------',pkID);
+        if (pkID && pkID !== null && pkID !== '') {
+            deviceLocationDetails.id = pkID;
+        }
+        deviceLocationDetails.deviceRegistrationDetailId = DeviceRegistartionID;
+        console.log("DeviceRegistartionID ----------------------------- ", DeviceRegistartionID)
         if (util.missingRequiredFields('deviceLocationDetails', deviceLocationDetails, res) === '') {
+
             const result = await dal.saveData(db.deviceLocationDetails, deviceLocationDetails, undefined, '-1');
             if (result) {
-                responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', result.id);
+                responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', '-1');
             }
             else {
                 responseHelper.error(res, result, codes.ERROR, 'Error in Saving device location details !!');
@@ -138,6 +188,7 @@ const saveTMCDeviceLocationDetails = async (req, res) => {
         responseHelper.error(res, error, error.code ? error.code : codes.ERROR, 'Error in Saving device location details !!');
     }
 }
+
 
 const saveTMCDeviceLocationDetailsP = async (req, res) => {
     try {
@@ -838,7 +889,7 @@ module.exports.saveTMCDetailsP = saveTMCDetailsP;
 module.exports.saveTMCDeviceBetteryStatusDetails = saveTMCDeviceBetteryStatusDetails;
 module.exports.saveTMCDeviceBetteryStatusDetailsP = saveTMCDeviceBetteryStatusDetailsP;
 
-module.exports.saveTMCDeviceLocationDetails =saveTMCDeviceLocationDetailsP;// saveTMCDeviceLocationDetails;
+module.exports.saveTMCDeviceLocationDetails = saveTMCDeviceLocationDetails;
 
 module.exports.saveTMCDeviceNetworkConnectivityStatusDetails = saveTMCDeviceNetworkConnectivityStatusDetails;
 

@@ -26,7 +26,7 @@ module.exports = function ( sequelize, DataTypes){
             field : 'date'
         },
         isDeviceActive :{
-            type : DataTypes.STRING,
+            type : DataTypes.BOOLEAN,
             field : 'is_device_active'
         },
         isActive :{

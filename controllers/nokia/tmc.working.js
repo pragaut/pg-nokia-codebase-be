@@ -123,8 +123,9 @@ const saveTMCDeviceBetteryStatusDetailsP = async (req, res) => {
 const saveTMCDeviceLocationDetails = async (req, res) => {
     try {
         let deviceLocationDetails = req.body;
+        console.log("saveTMCDeviceLocationDetails ----------------------------- ",req.body)
         if (util.missingRequiredFields('deviceLocationDetails', deviceLocationDetails, res) === '') {
-            const result = await dal.saveData(db.deviceLocationDetails, deviceLocationDetails, undefined.req.user.id);
+            const result = await dal.saveData(db.deviceLocationDetails, deviceLocationDetails, undefined,req.user.id);
             if (result) {
                 responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', result.id);
             }

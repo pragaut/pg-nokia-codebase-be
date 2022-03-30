@@ -148,7 +148,7 @@ const saveTMCDeviceLocationDetailsP = async (req, res) => {
             let result = undefined;
             let deviceLocationDetailid = dal.uuid(db.deviceLocationDetails.name);
 
-            await db.sequelize.query('call asp_nk_save_tower_monitoring_notification_details(:p_device_location_detail_id,:p_mac_address,:p_longitude,:p_latitude,:p_data_time,:p_created_by)', {
+            await db.sequelize.query('call asp_nk_save_device_location_details(:p_device_location_detail_id,:p_mac_address,:p_longitude,:p_latitude,:p_data_time,:p_created_by)', {
                 replacements: {
                     p_device_location_detail_id: deviceLocationDetailid,
                     p_mac_address: tmcData.macAddress ? tmcData.macAddress : '',

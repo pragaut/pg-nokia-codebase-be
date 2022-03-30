@@ -125,7 +125,7 @@ const saveTMCDeviceLocationDetails = async (req, res) => {
         let deviceLocationDetails = req.body;
         console.log("saveTMCDeviceLocationDetails ----------------------------- ",req.body)
         if (util.missingRequiredFields('deviceLocationDetails', deviceLocationDetails, res) === '') {
-            const result = await dal.saveData(db.deviceLocationDetails, deviceLocationDetails, undefined,req.user.id);
+            const result = await dal.saveData(db.deviceLocationDetails, deviceLocationDetails, undefined, '-1');
             if (result) {
                 responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', result.id);
             }
@@ -165,7 +165,7 @@ const saveTMCDeviceLocationDetailsP = async (req, res) => {
                 result = error;
             })
             if (result) {
-                responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', result.id);
+                responseHelper.success(res, codes.success, result, 'Device location details saved successfully !!', '-1');
             }
             else {
                 responseHelper.error(res, result, codes.ERROR, 'Error in Saving device location details !!');
@@ -838,7 +838,7 @@ module.exports.saveTMCDetailsP = saveTMCDetailsP;
 module.exports.saveTMCDeviceBetteryStatusDetails = saveTMCDeviceBetteryStatusDetails;
 module.exports.saveTMCDeviceBetteryStatusDetailsP = saveTMCDeviceBetteryStatusDetailsP;
 
-module.exports.saveTMCDeviceLocationDetails = saveTMCDeviceLocationDetails;
+module.exports.saveTMCDeviceLocationDetails =saveTMCDeviceLocationDetailsP;// saveTMCDeviceLocationDetails;
 
 module.exports.saveTMCDeviceNetworkConnectivityStatusDetails = saveTMCDeviceNetworkConnectivityStatusDetails;
 
